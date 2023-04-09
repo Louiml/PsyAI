@@ -1,38 +1,172 @@
-.App {
-  text-align: center;
+:root {
+  --background-color: #1a1a1a;
+  --chat-window-bg: #ffffff;
+  --text-color: #333;
+  --user-message-bg: #66bb6a;
+  --ai-message-bg: #e0e0e0;
+  --input-bg: #ffffff;
+  --button-bg: #66bb6a;
+  --button-bg-hover: #4caf50;
+  --scrollbar-thumb: #a3a3a3;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.dark-theme {
+  --background-color: #f5f5f5;
+  --chat-window: #333333;
+  --text-color: #f5f5f5;
+  --user-message-bg: #4caf50;
+  --ai-message-bg: #555555;
+  --input-bg: #2b2b2b;
+  --button-bg: #ffffff;
+  --button-bg-hover: #66bb6a;
+  --scrollbar-thumb: #777777;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--background-color);
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  min-height: 100vh;
+}
+
+.chat-window {
+  scrollbar-color: #35353d #393939 !important;
+  scrollbar-width: thin !important;
+  background-color: #333333;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 80%;
+  /* max-width: 600px; */
+  height: 800px;
+  overflow-y: auto;
+}
+
+.chat-window::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+  background-color: #3c3b4e;
+  border-radius: 5px;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: #66bb6a;
+  border-radius: 12px;
+  color: #ffffff;
+  padding: 10px;
+  max-width: 70%;
+}
+
+.ai-message {
+  align-self: flex-start;
+  background-color: #404246;
+  color: #d1d5db;
+  border-radius: 12px;
+  padding: 10px;
+  max-width: 70%;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+  width: 80%;
+  max-width: 500px;
+}
+
+input[type='text'] {
+  border: none;
+  border-radius: 25px;
+  flex-grow: 1;
   color: white;
+  width: 80%;
+  max-width: 500px;
+  background-color: #2b2b2b;
+  padding: 10px 20px;
+  outline: none;
+  font-size: 16px;
 }
 
-.App-link {
-  color: #61dafb;
+button {
+  background-color: #272a27;
+  border: none;
+  border-radius: 25px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 20px;
+  outline: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+button:hover {
+  background-color: #202620;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.typing-dots div {
+  animation: typing-dots 1.5s infinite;
+  background-color: #ffffff;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+}
+
+.typing-dots div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dots div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing-dots {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
   }
-  to {
-    transform: rotate(360deg);
+  40% {
+    transform: translateY(-4px);
   }
+}
+
+.scroll-to-bottom-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25292e;
+  color: white;
+  padding: 3px 16px;
+  border: none;
+  border-radius: 35px;
+  cursor: pointer;
+  font-size: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-to-bottom-btn:hover {
+  background-color: #23282e;
 }

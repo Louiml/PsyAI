@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "psychologbot",
+  "name": "PsychologBot is an AI-powered virtual psychologist designed to provide users with personalized and empathetic support. Engage in meaningful conversations, gain insights, and explore strategies for mental well-being, all through a user-friendly platform. Experience the future of mental health assistance with PsychologBot.",
   "icons": [
     {
       "src": "favicon.ico",
