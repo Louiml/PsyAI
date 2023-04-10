@@ -43,7 +43,7 @@ function App() {
   
     try {
       setTyping(true);
-      const res = await axios.post('http://localhost:5000/api/message', { message });
+      const res = await axios.post('https://ironcladpurpleunits.tupac3.repl.co/api/message', { message });
       setTimeout(() => {
         console.log("%cSEARCHING!", "font-size: 45px; color: yellow; background: black;");
         setTimeout(() => {
