@@ -10,6 +10,21 @@ function App() {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const bottomRef = useRef(null);
 
+  const parseText = (inputText) => {
+    const regex = /(\*\*.*?\*\*)/g;
+    const parts = inputText.split(regex);
+
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        const boldText = part.slice(2, -2);
+        return (
+          <strong key={index}>{boldText}</strong>
+        );
+      }
+      return part;
+    });
+  };
+
   const sendMessage = async () => {
     if (!message.trim()) {
       return;
@@ -98,7 +113,7 @@ function App() {
         <div className="message-container">
           {messages.map((msg, idx) => (
             <div key={idx} className={msg.sender === 'user' ? 'user-message' : 'ai-message'}>
-              {msg.text}
+              {parseText(msg.text)}
             </div>
           ))}
           {typing && (
