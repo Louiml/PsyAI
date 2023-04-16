@@ -1,0 +1,25 @@
+{
+  "short_name": "PsyAI",
+  "name": "PsyAI is an AI-powered virtual human designed to provide users with personalized and empathetic support. Engage in meaningful conversations, gain insights, and explore strategies for mental well-being, all through a user-friendly platform. Experience the future of mental health assistance with PsyAI.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

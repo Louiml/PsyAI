@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/psyai/static/css/main.e439abde.css",
+    "main.js": "/psyai/static/js/main.e121b5ec.js",
+    "static/js/787.e5e305d5.chunk.js": "/psyai/static/js/787.e5e305d5.chunk.js",
+    "index.html": "/psyai/index.html",
+    "main.e439abde.css.map": "/psyai/static/css/main.e439abde.css.map",
+    "main.e121b5ec.js.map": "/psyai/static/js/main.e121b5ec.js.map",
+    "787.e5e305d5.chunk.js.map": "/psyai/static/js/787.e5e305d5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e439abde.css",
+    "static/js/main.e121b5ec.js"
+  ]
+}
