@@ -9,21 +9,83 @@ function App() {
   const [darkTheme, setDarkTheme] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const bottomRef = useRef(null);
+  const [typingSpeed, setTypingSpeed] = useState(50);
+  const [showMenu, setShowMenu] = useState(false);
+  const [upgradeButtonDisabled, setUpgradeButtonDisabled] = useState(true);
+  const [inputValue, setInputValue] = useState('');
+  const [resultMessage, setResultMessage] = useState('');
+  const [isPremiumUser, setIsPremiumUser] = useState(false);
+  const [premiumPrice, setPremiumPrice] = useState("2.51$");
+  const inputRef = useRef(null);
 
   const parseText = (inputText) => {
-    const regex = /(\*\*.*?\*\*)/g;
-    const parts = inputText.split(regex);
-
-    return parts.map((part, index) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        const boldText = part.slice(2, -2);
-        return (
-          <strong key={index}>{boldText}</strong>
-        );
+    const regexBold = /(\*\*.*?\*\*)/g;
+    const regexNewline = /(\n)|\\n/g;
+    const regexUrl = /(https?:\/\/[^\s]+)/g;
+    const regexCode = /(```[\s\S]*?```)/g;
+    const regexInlineCode = /(`[^`]*`)/g;
+  
+    const processLine = (line) => {
+      return line.split(regexBold).map((part, index) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          const boldText = part.slice(2, -2);
+          return (
+            <strong key={index}>
+              {boldText.split(regexUrl).map((text, i) => {
+                return text.match(regexUrl) ? (
+                  <a key={i} href={text} target="_blank" rel="noreferrer">
+                    {text}
+                  </a>
+                ) : (
+                  <React.Fragment key={i}>{text}</React.Fragment>
+                );
+              })}
+            </strong>
+          );
+        }
+  
+        return part.split(regexUrl).map((text, i) => {
+          return text.match(regexUrl) ? (
+            <a key={i} href={text} target="_blank" rel="noreferrer">
+              {text}
+            </a>
+          ) : (
+            <React.Fragment key={i}>
+              {text.split(regexInlineCode).map((code, ci) => {
+                return code.startsWith('`') && code.endsWith('`') ? (
+                  <code key={ci} className="code-block">
+                    {code.slice(1, -1)}
+                  </code>
+                ) : (
+                  <React.Fragment key={ci}>{code}</React.Fragment>
+                );
+              })}
+            </React.Fragment>
+          );
+        });
+      });
+    };
+  
+    const processCodeBlock = (codeBlock) => {
+      const code = codeBlock.slice(3, -3);
+      return <pre className="code-block">{code}</pre>;
+    };
+  
+    const parts = inputText.split(regexCode);
+    const processedParts = parts.map((part, index) => {
+      if (part.startsWith('```') && part.endsWith('```')) {
+        return processCodeBlock(part);
       }
-      return part;
+      return part.split(regexNewline).map((line, idx) => (
+        <React.Fragment key={idx}>
+          {processLine(line)}
+          {/* <br /> */}
+        </React.Fragment>
+      ));
     });
-  };
+  
+    return processedParts;
+  };   
 
   const sendMessage = async () => {
     if (!message.trim()) {
@@ -71,7 +133,7 @@ function App() {
         }, 5000)
       }, 5000)
     }, 4000)
-      const typingDuration = Math.max(1000, res.data.response.length * 50);
+      const typingDuration = Math.max(1000, res.data.response.length * typingSpeed);
   
       setTimeout(() => {
         setMessages([...messages, { text: message, sender: 'user' }, { text: res.data.response, sender: 'ai' }]);
@@ -95,11 +157,108 @@ function App() {
     setShowScrollButton(isScrolledUp);
   };
 
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  };
+
+  const changeTypingSpeed = () => {
+    if (premiumPrice === "0.00$") {
+      setTypingSpeed(2);
+      setIsPremiumUser(true);
+      localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 2592000000 }));
+    }
+  };  
+
   const scrollToBottom = () => {
     bottomRef.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const handleInputChange = async (e) => {
+    setInputValue(e.target.value);
+  
+    const redeemCode = 'MAOR-6969-6969-1UWU';
+  
+    if (e.target.value === redeemCode) {
+      try {
+        const response = await fetch('https://chatapi.louiml.net/api/message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ code: redeemCode }),
+        });
+  
+        const data = await response.json();
+  
+        if (data.success) {
+          setResultMessage({ text: 'Success!', color: 'green' });
+          setPremiumPrice("0.00$");
+          setUpgradeButtonDisabled(false);
+        } else {
+          setResultMessage({ text: 'Failed', color: 'red' });
+          setUpgradeButtonDisabled(true);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        setResultMessage({ text: 'Failed', color: 'red' });
+        setUpgradeButtonDisabled(true);
+      }
+    } else if (e.target.value === "XCLSV-TESTR-AC3SS-42AI") {
+          setResultMessage({ text: 'Success!', color: 'green' });
+          setPremiumPrice("0.00$");
+          setUpgradeButtonDisabled(false);
+    } else {
+      setResultMessage({ text: 'Failed', color: 'red' });
+      setUpgradeButtonDisabled(true);
+    }
+  };
+  
+  const Menu = () => {
+    return (
+      <div className="menu">
+        <div>
+          <input
+            ref={inputRef}
+            type="text"
+            value={inputValue}
+            className='shop-menu-input'
+            onChange={handleInputChange}
+            placeholder="Redeem Code"
+          />
+          {resultMessage && (
+            <span style={{ color: resultMessage.color, marginLeft: '10px' }}>
+              {resultMessage.text}
+            </span>
+          )}
+        </div>
+        <span className='shop-menu-price'>{premiumPrice}</span>
+        <button onClick={changeTypingSpeed} className="shop-menu-button" disabled={premiumPrice !== "0.00$"}>
+          Upgrade to Premium
+       </button>
+       {upgradeButtonDisabled && <span className='text-info'>Coming soon</span>}
+       {premiumPrice === "0.00$" && <span className='text-info'>Early access to testers</span>}
+      </div>
+    );
+  };
   
   useEffect(() => {
+    const premiumUser = JSON.parse(localStorage.getItem('premiumUser'));
+    if (premiumUser && premiumUser.status && premiumUser.expiry > Date.now()) {
+      setIsPremiumUser(true);
+    }
+    const premiumUserData = localStorage.getItem("premiumUser");
+    if (premiumUserData) {
+      const { status, expiry } = JSON.parse(premiumUserData);
+      if (status && Date.now() < expiry) {
+        setTypingSpeed(2);
+        setPremiumPrice("0.00$");
+      } else {
+        localStorage.removeItem("premiumUser");
+      }
+    }
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
     const chatWindow = document.querySelector('.chat-window');
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }, [messages]);
@@ -109,6 +268,14 @@ function App() {
       <button onClick={toggleTheme} style={{ position: 'fixed', top: '10px', right: '10px' }}>
         Toggle Theme
       </button>
+      {!isPremiumUser && (
+        <>
+          <button onClick={toggleMenu} className='menubtn'>
+            Upgrade
+          </button>
+          {showMenu && <Menu />}
+        </>
+      )}
       <div className="chat-window" id="chat-container" onScroll={handleScroll}>
         <div className="message-container">
           {messages.map((msg, idx) => (

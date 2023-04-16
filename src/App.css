@@ -170,3 +170,110 @@ button:hover {
 .scroll-to-bottom-btn:hover {
   background-color: #23282e;
 }
+
+a {
+  color: #3a63a0;
+  text-decoration-color: #3a63a0;
+}
+
+a:hover {
+  color: #436eae;
+  text-decoration-color: #436eae;
+}
+
+a:active {
+  color: #0066ff;
+  text-decoration-color: #0066ff;
+}
+
+.code-block {
+  background-color: #313338;
+  border-radius: 4px;
+  color: rgb(255, 255, 255);
+  padding: 4px 6px;
+  font-family: monospace;
+}
+
+.line-break {
+  display: block;
+}
+
+.menubtn {
+  background-color: #333333;
+  margin: auto;
+  margin-right: 10%;
+  margin-bottom: 0;
+  border-radius: 20px 20px 0 0;
+  transition: all 0.3s;
+}
+
+.menubtn:hover {
+  background-color: #333333;
+  border-radius: 0 0 0 0;
+}
+
+.menu {
+  background-color: #212020;
+  user-select: none;
+  position: fixed;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu .shop-menu-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  background-color: #2a2828;
+  color: #9a9a9a;
+  font-size: 14px;
+}
+
+.menu .shop-menu-button {
+  background-color: #2a2828;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.7s;
+}
+
+.menu .shop-menu-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #27ae60;
+  margin: 16px 0;
+}
+
+.menu .shop-menu-button:hover {
+  background-color: #121010;
+}
+
+.menu .shop-menu-button:active {
+  background-color: #282727;
+}
+
+.text-info {
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3a7bd5;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  margin-left: 10px;
+  transition: color 0.3s;
+}
+
+.text-info:hover {
+  color: #5ec5ed;
+  cursor: pointer;
+}
