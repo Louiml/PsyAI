@@ -6,7 +6,6 @@ function App() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [typing, setTyping] = useState(false);
-  const [darkTheme, setDarkTheme] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const bottomRef = useRef(null);
   const [typingSpeed, setTypingSpeed] = useState(50);
@@ -16,6 +15,9 @@ function App() {
   const [resultMessage, setResultMessage] = useState('');
   const [isPremiumUser, setIsPremiumUser] = useState(false);
   const [premiumPrice, setPremiumPrice] = useState("2.51$");
+  const [email, setEmail] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSuggestionMenuOpen, setIsSuggestionMenuOpen] = useState(false);
   const inputRef = useRef(null);
 
   const parseText = (inputText) => {
@@ -24,6 +26,7 @@ function App() {
     const regexUrl = /(https?:\/\/[^\s]+)/g;
     const regexCode = /(```[\s\S]*?```)/g;
     const regexInlineCode = /(`[^`]*`)/g;
+    const regexHyphen = /^-\s+/; 
   
     const processLine = (line) => {
       return line.split(regexBold).map((part, index) => {
@@ -41,6 +44,14 @@ function App() {
                 );
               })}
             </strong>
+          );
+        } else if (line.match(regexHyphen)) {
+          line = line.replace(regexHyphen, '• ');
+          return (
+            <React.Fragment>
+              <strong>{processLine(line)}</strong>
+              <br />
+            </React.Fragment>
           );
         }
   
@@ -85,7 +96,16 @@ function App() {
     });
   
     return processedParts;
-  };   
+  };
+  
+  const apiCall = async (inputText) => {
+    try {
+      const response = await axios.post('https://chatapi.louiml.net/api/message', { message: inputText });
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const sendMessage = async () => {
     if (!message.trim()) {
@@ -120,7 +140,7 @@ function App() {
   
     try {
       setTyping(true);
-      const res = await axios.post('https://ironcladpurpleunits.tupac3.repl.co/api/message', { message });
+      const res = await axios.post('https://chatapi.louiml.net/api/message', { message });
       setTimeout(() => {
         console.log("%cSEARCHING!", "font-size: 45px; color: yellow; background: black;");
         setTimeout(() => {
@@ -145,10 +165,22 @@ function App() {
     }
   };  
 
-  const toggleTheme = () => {
-    const body = document.getElementById("app-body");
-    setDarkTheme(!darkTheme);
-    body.classList.toggle("dark-theme");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://chatesender.louiml.net/api/send-email', { email });
+      if (response.status === 200) {
+        alert('sent successfully!, Thank you');
+      } else {
+        alert('Failed to send try again later');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Failed to send try again later');
+    }
+    setEmail('');
+    setIsOpen(false);
+    setIsSuggestionMenuOpen(false);
   };
 
   const handleScroll = (e) => {
@@ -159,7 +191,63 @@ function App() {
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
+    if (isOpen) {
+      setIsOpen(false);
+    } else if (isSuggestionMenuOpen) {
+      setIsSuggestionMenuOpen(false);
+    }
   };
+  
+  const toggleEmailMenu = () => {
+    setIsOpen(!isOpen);
+    if (showMenu) {
+      setShowMenu(false);
+    } else if (isSuggestionMenuOpen) {
+      setIsSuggestionMenuOpen(false);
+    }
+  };
+
+  const toggleSuggestionMenu = () => {
+    setIsSuggestionMenuOpen(!isSuggestionMenuOpen);
+    if (showMenu) {
+      setShowMenu(false);
+    } else if (isOpen) {
+      setIsOpen(false);
+    }
+  };
+
+  const clearAction = () => {
+    setMessages([]);
+      setMessage('');
+      return;
+  }
+
+  const saveAction = () => {
+    try {
+      const chatHistory = { messages };
+      const chatHistoryBlob = new Blob([JSON.stringify(chatHistory, null, 2)], { type: 'application/json' });
+      const downloadUrl = URL.createObjectURL(chatHistoryBlob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = downloadUrl;
+      downloadLink.download = 'chat_history.json';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      setMessage('');
+      return;
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save chat.');
+      return;
+    }
+  }
+
+  const openSrc = () => {
+    window.open('https://github.com/funmmer/PsyAI');
+  }
+  const openDiscordServer = () => {
+    window.open('https://discord.gg/MMsPbxbfH8');
+  }
 
   const changeTypingSpeed = () => {
     if (premiumPrice === "0.00$") {
@@ -211,6 +299,10 @@ function App() {
       setResultMessage({ text: 'Failed', color: 'red' });
       setUpgradeButtonDisabled(true);
     }
+  };
+
+  const handleChange = (e) => {
+    setEmail(e.target.value);
   };
   
   const Menu = () => {
@@ -264,10 +356,7 @@ function App() {
   }, [messages]);
 
   return (
-    <div className={`container${darkTheme ? ' dark-theme' : ''}`}>
-      <button onClick={toggleTheme} style={{ position: 'fixed', top: '10px', right: '10px' }}>
-        Toggle Theme
-      </button>
+    <>
       {!isPremiumUser && (
         <>
           <button onClick={toggleMenu} className='menubtn'>
@@ -276,6 +365,49 @@ function App() {
           {showMenu && <Menu />}
         </>
       )}
+                <button onClick={openSrc} className='srcbtn'>
+            Source Code
+          </button>
+          <button onClick={toggleEmailMenu} className='reportbtn'>
+            Report a bug
+          </button>
+          <button onClick={clearAction} className='clearbtn'>
+            Clear the chat
+          </button>
+          <button onClick={saveAction} className='savebtn'>
+            Save the chat
+          </button>
+          <button onClick={openDiscordServer} className='disverbtn'>
+            Discord Server
+          </button>
+          <button onClick={toggleSuggestionMenu} className='suggestionbtn'>
+            Suggestion
+          </button>
+          {isSuggestionMenuOpen && (
+            <form onSubmit={handleSubmit} className='bugForm'>
+              <input
+                className='bugInput'
+                type="text"
+                value={email}
+                onChange={handleChange}
+                placeholder="Tell us about your suggestion"
+              />
+            <button className='bugButton' type="submit">Submit</button>
+          </form>
+          )}
+          {isOpen && (
+            <form onSubmit={handleSubmit} className='bugForm'>
+              <input
+                className='bugInput'
+                type="text"
+                value={email}
+                onChange={handleChange}
+                placeholder="Tell us about the bug"
+              />
+            <button className='bugButton' type="submit">Submit</button>
+          </form>
+          )}
+      <div className="app-content">
       <div className="chat-window" id="chat-container" onScroll={handleScroll}>
         <div className="message-container">
           {messages.map((msg, idx) => (
@@ -316,7 +448,8 @@ function App() {
           ⬇
         </button>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 
