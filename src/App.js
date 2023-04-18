@@ -168,7 +168,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://chatesender.louiml.net/api/send-email', { email });
+      const response = await axios.post('https://sadstylishmouse.tupac3.repl.co/api/send-email', { email });
       if (response.status === 200) {
         alert('sent successfully!, Thank you');
       } else {
