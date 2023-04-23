@@ -18,17 +18,9 @@ function App() {
   const [premiumPrice, setPremiumPrice] = useState("2.51$");
   const [email, setEmail] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [isClearMenu, setIsClearMenuOpen] = useState(false);
   const [isSuggestionMenuOpen, setIsSuggestionMenuOpen] = useState(false);
   const inputRef = useRef(null);
-  
-  const apiCall = async (inputText) => {
-    try {
-      const response = await axios.post('https://chatapi.louiml.net/api/message', { message: inputText });
-      return response;
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const sendMessage = async () => {
     if (!message.trim()) {
@@ -86,7 +78,19 @@ function App() {
     } catch (err) {
       console.error(err);
     }
-  };  
+  };
+
+  const handleClearCancel = async (e) => {
+    e.preventDefault();
+    setIsClearMenuOpen(false);
+  }
+  
+  const handleClear = async (e) => {
+    e.preventDefault();
+    setMessages([]);
+    setMessage('');
+    setIsClearMenuOpen(false);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -118,6 +122,8 @@ function App() {
       setIsOpen(false);
     } else if (isSuggestionMenuOpen) {
       setIsSuggestionMenuOpen(false);
+    } else if (isClearMenu) {
+      setIsClearMenuOpen(false);
     }
   };
   
@@ -127,6 +133,8 @@ function App() {
       setShowMenu(false);
     } else if (isSuggestionMenuOpen) {
       setIsSuggestionMenuOpen(false);
+    } else if (isClearMenu) {
+      setIsClearMenuOpen(false);
     }
   };
 
@@ -136,14 +144,21 @@ function App() {
       setShowMenu(false);
     } else if (isOpen) {
       setIsOpen(false);
+    } else if (isClearMenu) {
+      setIsClearMenuOpen(false);
     }
   };
 
-  const clearAction = () => {
-    setMessages([]);
-      setMessage('');
-      return;
-  }
+  const toggleClearMenu = () => {
+    setIsClearMenuOpen(!isClearMenu);
+    if (showMenu) {
+      setShowMenu(false);
+    } else if (isOpen) {
+      setIsOpen(false);
+    } else if (isSuggestionMenuOpen) {
+      setIsSuggestionMenuOpen(false);
+    }
+  };
 
   const saveAction = () => {
     try {
@@ -288,13 +303,13 @@ function App() {
           {showMenu && <Menu />}
         </>
       )}
-                <button onClick={openSrc} className='srcbtn'>
+          <button onClick={openSrc} className='srcbtn'>
             Source Code
           </button>
           <button onClick={toggleEmailMenu} className='reportbtn'>
             Report a bug
           </button>
-          <button onClick={clearAction} className='clearbtn'>
+          <button onClick={toggleClearMenu} className='clearbtn'>
             Clear the chat
           </button>
           <button onClick={saveAction} className='savebtn'>
@@ -328,6 +343,13 @@ function App() {
                 placeholder="Tell us about the bug"
               />
             <button className='bugButton' type="submit">Submit</button>
+          </form>
+          )}
+          {isClearMenu && (
+              <form onSubmit={handleClear} className='clearForm'>
+              <p className='clearText'>Are you sure you want to clear the chat?</p>
+              <button className='clearButton' onClick={handleClearCancel}>Cancel</button>
+              <button className='clearButton' type="submit">Clear</button>
           </form>
           )}
       <div className="app-content">

@@ -193,13 +193,14 @@ a:hover {
 }
 
 a:active {
-  color: #0066ff;
-  text-decoration-color: #0066ff;
+  color: #3675d3;
+  text-decoration-color: #3675d3;
 }
 
 .code-block {
+  position: relative;
   background-color: #313338;
-  border-radius: 4px;
+  border-radius: 15px 15px 4px 4px;
   color: rgb(255, 255, 255);
   padding: 4px 6px;
   font-family: monospace;
@@ -396,6 +397,45 @@ a:active {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.clearForm {
+  background-color: #212020;
+  user-select: none;
+  position: fixed;
+  left: 43%;
+  text-align: center;
+  top: 35%;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.clearText {
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 10px;
+  background-color: #2b2b2b;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.clearButton {
+  background-color: #2a2828;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.7s;
+}
+
 .bugInput {
   width: 100%;
   padding: 12px 20px;
@@ -417,3 +457,75 @@ a:active {
   cursor: pointer;
   font-size: 16px;
 }
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.code-js-block {
+  color:rgb(255, 0, 0);
+}
+
+.copy-code-button {
+  position: absolute;
+  right: 0.6%;
+  top: 1.6%;
+  padding: 7px 14px;
+  background-color: #3e414a;
+  border-radius: 0 20px 0 0;
+  color: #fff;
+  transition: all 0.8s;
+  border: none;
+  cursor: pointer;
+}
+
+.copy-code-button:hover {
+  background-color: #313338;
+  color: #ffffff;
+}
+
+.code-header {
+  position: relative;
+  border-radius: 15px 20px 0 0;
+  background-color: #3e414a;
+  padding: 5px;
+  color: #bcbdbd;
+  font-size: 20px;
+}
+
+/* .copy-code-div {
+  position: relative;
+}
+
+.copy-code-text {
+  position: static;
+  right: 0%;
+  background-color: #373b43;
+  color: #fff;
+  animation: slide-in-right 0.5s ease-in-out;
+  font-size: 8px;
+  border-radius: 5px;
+  cursor: none;
+  user-select: none;
+}
+
+@keyframes slide-in-right {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 50%;
+  }
+} */
