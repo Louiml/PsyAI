@@ -34,6 +34,13 @@ import './App.css';
           setMessage('');
           return;
         }
+
+        if (message.trim() === '+/[clear') {
+          localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 2592000000 }));
+          window.location.reload();  
+          setMessage('');
+          return;
+        }
     
         if (message.trim() === '+/[save') {
           try {
