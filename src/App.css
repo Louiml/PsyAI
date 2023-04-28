@@ -320,7 +320,7 @@ a:active {
   user-select: none;
   padding: 20px;
   width: 40%;
-  height: 430px;
+  height: 370px;
   border-radius: 10px;
   flex: 1;
   scrollbar-color: #35353d #393939 !important;
@@ -559,5 +559,11 @@ tr:nth-child(even) {
 @media (max-width: 868px) {
   .right-menu-nim-buttons {
     display: none;
+  }
+}
+
+@media (max-width: 768) {
+  .menu {
+    height: 380px;
   }
 }
