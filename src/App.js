@@ -293,7 +293,6 @@ import './App.css';
               <button onClick={toggleMenu} className='menubtn'>
                 Upgrade
               </button>
-              {showMenu && <Menu />}
             </>
           )}
           <div className='right-menu-nim-buttons'>
@@ -317,6 +316,7 @@ import './App.css';
               </button>
               </div>
               </div>
+              {showMenu && <Menu />}
               {isSuggestionMenuOpen && (
                 <form onSubmit={handleSubmit} className='bugForm'>
                   <input
