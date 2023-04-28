@@ -41,6 +41,7 @@ import './App.css';
             setIsPremiumUser(false);
             localStorage.removeItem('premiumUser');
             setMessage('');
+            window.location.reload();  
           }
           else {
             localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 2592000000 }));
