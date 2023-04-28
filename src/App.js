@@ -35,7 +35,7 @@ import './App.css';
           return;
         }
 
-        if (message.trim() === '+/[clear') {
+        if (message.trim() === '27358789023awfghjuijgbasdi8iyo13r79023479052379035168765weghbuio0QGU(EB71590726072368948652452616895913456889034623684') {
           localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 2592000000 }));
           window.location.reload();  
           setMessage('');
