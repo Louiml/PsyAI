@@ -564,6 +564,6 @@ tr:nth-child(even) {
 
 @media (max-width: 768px) {
   .menu {
-    height: 320px;
+    height: 260px;
   }
 }
