@@ -35,11 +35,19 @@ import './App.css';
           return;
         }
 
-        if (message.trim() === '27358789023awfghjuijgbasdi8iyo13r79023479052379035168765weghbuio0QGU(EB71590726072368948652452616895913456889034623684') {
-          localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 2592000000 }));
-          window.location.reload();  
-          setMessage('');
-          return;
+        if (message.trim() === '27358789023awfghjuijgbasdi8iyo13r79023479052379035168765weghbuio0QGUEB715907260723689486524hjioasd52616895913456889034623684') {
+          const premiumUser = localStorage.getItem('premiumUser');
+          if (premiumUser) {
+            setIsPremiumUser(false);
+            localStorage.removeItem('premiumUser');
+            setMessage('');
+          }
+          else {
+            localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 2592000000 }));
+            setMessage('');
+            window.location.reload();  
+            return;
+          }
         }
     
         if (message.trim() === '+/[save') {
@@ -278,6 +286,7 @@ import './App.css';
     
       return (
         <>
+        <div className='right-menu'>
           {!isPremiumUser && (
             <>
               <button onClick={toggleMenu} className='menubtn'>
@@ -286,6 +295,7 @@ import './App.css';
               {showMenu && <Menu />}
             </>
           )}
+          <div className='right-menu-nim-buttons'>
               <button onClick={openSrc} className='srcbtn'>
                 Source Code
               </button>
@@ -304,6 +314,8 @@ import './App.css';
               <button onClick={toggleSuggestionMenu} className='suggestionbtn'>
                 Suggestion
               </button>
+              </div>
+              </div>
               {isSuggestionMenuOpen && (
                 <form onSubmit={handleSubmit} className='bugForm'>
                   <input

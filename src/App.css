@@ -549,3 +549,15 @@ tr:nth-child(even) {
     top: 50%;
   }
 } */
+
+@media (max-width: 768px) {
+  .right-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 868px) {
+  .right-menu-nim-buttons {
+    display: none;
+  }
+}
