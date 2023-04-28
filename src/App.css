@@ -318,16 +318,31 @@ a:active {
 .menu {
   background-color: #212020;
   user-select: none;
-  position: fixed;
-  left: 43%;
-  top: 35%;
   padding: 20px;
+  width: 40%;
+  height: 430px;
   border-radius: 10px;
-  width: 300px;
-  display: flex;
+  flex: 1;
+  scrollbar-color: #35353d #393939 !important;
+  scrollbar-width: thin !important;
   flex-direction: column;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: auto;
   align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background-color: #3c3b4e;
+  border-radius: 5px;
 }
 
 .menu .shop-menu-input {
@@ -355,6 +370,7 @@ a:active {
 .menu .shop-menu-price {
   font-size: 24px;
   font-weight: bold;
+  text-decoration: overline;
   color: #27ae60;
   margin: 16px 0;
 }
@@ -380,6 +396,10 @@ a:active {
 .text-info:hover {
   color: #5ec5ed;
   cursor: pointer;
+}
+
+.span-color {
+  color: white;
 }
 
 .bugForm {

@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';
 
 const parseText = (inputText) => {
     // const ref = React.createRef();
@@ -11,6 +12,7 @@ const parseText = (inputText) => {
     const regexUnderline = /(_[^_]+_)/g;
     const regexTableLine = /^\|.*\|$/;
     const regexImage = /!\[(.*?)\]\((.*?)\)/g;
+    const regexSettings = /^-(settings)$/;
 
     const processTable = (tableLines) => {
       return (
@@ -70,6 +72,11 @@ const parseText = (inputText) => {
           return (
             <React.Fragment>
                 <img alt="$1" src="$2"/>
+            </React.Fragment>
+          );
+        } else if (line.match(regexSettings)) {
+          return (
+            <React.Fragment>
             </React.Fragment>
           );
         }
