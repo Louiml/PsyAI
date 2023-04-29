@@ -11,7 +11,7 @@ const parseText = (inputText) => {
     const regexHyphen = /^-\s+/;
     const regexUnderline = /(_[^_]+_)/g;
     const regexTableLine = /^\|.*\|$/;
-    const regexImage = /!\[(.*?)\]\((.*?)\)/g;
+    const regexImage = /^!\[(.*?)\]\((.*?)\)$/;
     const regexSettings = /^-(settings)$/;
 
     const processTable = (tableLines) => {
@@ -34,6 +34,7 @@ const parseText = (inputText) => {
     };
   
     const processLine = (line) => {
+      const matches = line.match(regexImage);
       return line.split(regexBold).map((part, index) => {
         if (part.startsWith('**') && part.endsWith('**')) {
           const boldText = part.slice(2, -2);
@@ -68,10 +69,10 @@ const parseText = (inputText) => {
               <strong>{processLine(line)}</strong>
             </React.Fragment>
           );
-        } else if (line.match(regexImage)) {
+        } else if (matches) {
           return (
             <React.Fragment>
-                <img alt="$1" src="$2"/>
+              <img alt={matches[1]} src={matches[2]} />
             </React.Fragment>
           );
         } else if (line.match(regexSettings)) {
