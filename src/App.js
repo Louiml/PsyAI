@@ -75,7 +75,6 @@ import './App.css';
         try {
           setIsWelcomeVisible(false);
           setTyping(true);
-          setMessage('');
           const res = await axios.post('https://chatapi.louiml.net/api/message', { message });
           setTimeout(() => {
             console.log("%cSEARCHING!", "font-size: 45px; color: yellow; background: black;");
@@ -91,6 +90,8 @@ import './App.css';
         }, 4000)
           const typingDuration = Math.max(1000, res.data.response.length * typingSpeed);
       
+          setMessage('');
+          
           setTimeout(() => {
             setMessages([...messages, { text: message, sender: 'user' }, { text: res.data.response, sender: 'ai' }]);
             setTyping(false);
