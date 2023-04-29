@@ -549,31 +549,31 @@ tr:nth-child(even) {
   }
 } */
 
-@media (max-width: 768px) {
+@media (max-width: 868px) {
   .right-menu {
     display: none;
   }
 }
 
-@media (max-width: 868px) {
+@media (max-width: 968px) {
   .right-menu-nim-buttons {
     display: none;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 868px) {
   .menu {
     height: 260px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 868px) {
   .welcome-div {
     display: none;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 868px) {
   #image {
     display: none;
   }
