@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/PsyAI/static/css/main.70b016ee.css",
-    "main.js": "/PsyAI/static/js/main.e144d110.js",
+    "main.js": "/PsyAI/static/js/main.b9e1b178.js",
     "static/js/787.e5e305d5.chunk.js": "/PsyAI/static/js/787.e5e305d5.chunk.js",
     "index.html": "/PsyAI/index.html",
     "main.70b016ee.css.map": "/PsyAI/static/css/main.70b016ee.css.map",
-    "main.e144d110.js.map": "/PsyAI/static/js/main.e144d110.js.map",
+    "main.b9e1b178.js.map": "/PsyAI/static/js/main.b9e1b178.js.map",
     "787.e5e305d5.chunk.js.map": "/PsyAI/static/js/787.e5e305d5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.70b016ee.css",
-    "static/js/main.e144d110.js"
+    "static/js/main.b9e1b178.js"
   ]
 }
