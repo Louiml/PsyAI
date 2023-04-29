@@ -370,7 +370,6 @@ a:active {
 .menu .shop-menu-price {
   font-size: 24px;
   font-weight: bold;
-  text-decoration: overline;
   color: #27ae60;
   margin: 16px 0;
 }
@@ -566,4 +565,46 @@ tr:nth-child(even) {
   .menu {
     height: 260px;
   }
+}
+
+@media (max-width: 768px) {
+  .welcome-div {
+    display: none;
+  }
+}
+
+.welcome-div {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  user-select: none;
+  flex: 1;
+  scrollbar-color: #35353d #393939 !important;
+  scrollbar-width: thin !important;
+  transform: translate(-50%, -50%);
+  overflow-y: auto;
+  border-radius: 15px;
+  padding: 85px 95px;
+  color: white;
+  background-color: #292929;
+}
+
+.welcome-text {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.welcome-text2 {
+  font-size: 30px;
+  color: aliceblue;
+}
+
+.welcome-example {
+  color: lightgray;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  border: 3px dashed rgb(61, 61, 62);
+  padding: 30px 40px;
 }

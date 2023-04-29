@@ -17,28 +17,14 @@ import './App.css';
       const [inputValue, setInputValue] = useState('');
       const [resultMessage, setResultMessage] = useState('');
       const [isPremiumUser, setIsPremiumUser] = useState(false);
-      const [premiumPrice, setPremiumPrice] = useState("2.90$");
+      const [premiumPrice, setPremiumPrice] = useState("11.7$ [45% OFF]");
       const [email, setEmail] = useState('');
+      const [isWelcomeVisible, setIsWelcomeVisible] = useState(true);
+      const [isWelcomeAfterClearVisible, setIsWelcomeAfterClearVisible] = useState(false);
       const [isOpen, setIsOpen] = useState(false);
       const [isClearMenu, setIsClearMenuOpen] = useState(false);
       const [isSuggestionMenuOpen, setIsSuggestionMenuOpen] = useState(false);
       const inputRef = useRef(null);
-      const emojis = ['❤️', '🧡', '💛', '💚', '💙', '💜', '💗', '🤍', '🖤', '🤎', '❣', '💓', '💖', '💕', '💞', '💝'];
-
-      const [positions, setPositions] = useState({});
-
-      const getRandomPosition = () => {
-        const left = Math.floor(Math.random() * window.innerWidth) + 'px';
-        const top = Math.floor(Math.random() * window.innerHeight) + 'px';
-        return { left, top };
-      };
-
-      const handleChangePosition = (index) => {
-        const newPositions = { ...positions };
-        newPositions[index] = getRandomPosition();
-        setPositions(newPositions);
-      };
-    
       const sendMessage = async () => {
         if (!message.trim()) {
           return;
@@ -87,6 +73,7 @@ import './App.css';
         }  
       
         try {
+          setIsWelcomeVisible(false);
           setTyping(true);
           setMessage('');
           const res = await axios.post('https://chatapi.louiml.net/api/message', { message });
@@ -122,6 +109,7 @@ import './App.css';
         e.preventDefault();
         setMessages([]);
         setMessage('');
+        setIsWelcomeAfterClearVisible(true);
         setIsClearMenuOpen(false);
       }
     
@@ -238,6 +226,62 @@ import './App.css';
     
       const handleChange = (e) => {
         setEmail(e.target.value);
+      };
+
+      const exampleCode = async (e) => {
+          e.preventDefault();
+          setIsWelcomeAfterClearVisible(false);
+          setIsWelcomeVisible(false);
+          setMessage('Write an example code');
+        }
+
+        const exampleAtheism = async (e) => {
+            e.preventDefault();
+            setIsWelcomeAfterClearVisible(false);
+            setIsWelcomeVisible(false);
+            setMessage('What is Atheism?');
+          }
+
+        const example911 = async (e) => {
+            e.preventDefault();
+            setIsWelcomeAfterClearVisible(false);
+            setIsWelcomeVisible(false);
+            setMessage('9/11');
+          }
+
+        const exampletrump = async (e) => {
+            e.preventDefault();
+            setIsWelcomeAfterClearVisible(false);
+            setIsWelcomeVisible(false);
+            setMessage('Who is Doland Trump?');
+          }
+
+          const WelcomeAfterClear = () => {
+            return (
+              <div className='welcome-div'>
+                <h1 className='welcome-text'>Welcome back to <span style={{ textDecoration: 'underline' }}>PsyAI</span></h1>
+                <div className='welcome-example'>
+                  <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
+                  <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
+                  <button className='welcome-btn' onClick={example911}>9/11</button>
+                  <button className='welcome-btn' onClick={exampletrump}>Who is Doland Trump?</button>
+                </div>
+              </div>
+            );
+          };
+
+       const Welcome = () => {
+        return (
+          <div className='welcome-div'>
+            <h1 className='welcome-text'>Welcome to <span style={{ textDecoration: 'underline' }}>PsyAI</span></h1>
+            <div className='welcome-example'>
+              <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
+              <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
+              <button className='welcome-btn' onClick={example911}>9/11</button>
+              <button className='welcome-btn' onClick={exampletrump}>Who is Doland Trump?</button>
+            </div>
+          </div>
+        );
       };
       
       const Menu = () => {
@@ -383,6 +427,12 @@ import './App.css';
             </div>
             <div ref={bottomRef}></div>
           </div>
+          {isWelcomeVisible ? (
+            <Welcome />
+          ) : null}
+          {isWelcomeAfterClearVisible ? (
+            <WelcomeAfterClear />
+          ) : null}
           <div className="input-wrapper">
             <input
               type="text"
@@ -408,4 +458,5 @@ import './App.css';
         </>
     );
   };
+
 export default App;

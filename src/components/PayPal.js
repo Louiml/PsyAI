@@ -16,7 +16,7 @@ export default function Paypal() {
                   description: "Premium Plan",
                   amount: {
                     currency_code: "USD",
-                    value: 2.90,
+                    value: 11.7,
                   },
                 },
               ],
