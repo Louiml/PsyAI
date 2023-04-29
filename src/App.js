@@ -13,7 +13,7 @@ import './App.css';
       const [typingSpeed, setTypingSpeed] = useState(50);
       const [checkout, setCheckOut] = useState(true);
       const [showMenu, setShowMenu] = useState(false);
-      const [upgradeButtonDisabled, setUpgradeButtonDisabled] = useState(true);
+      const [setUpgradeButtonDisabled] = useState(true);
       const [inputValue, setInputValue] = useState('');
       const [resultMessage, setResultMessage] = useState('');
       const [isPremiumUser, setIsPremiumUser] = useState(false);
@@ -23,6 +23,21 @@ import './App.css';
       const [isClearMenu, setIsClearMenuOpen] = useState(false);
       const [isSuggestionMenuOpen, setIsSuggestionMenuOpen] = useState(false);
       const inputRef = useRef(null);
+      const emojis = ['❤️', '🧡', '💛', '💚', '💙', '💜', '💗', '🤍', '🖤', '🤎', '❣', '💓', '💖', '💕', '💞', '💝'];
+
+      const [positions, setPositions] = useState({});
+
+      const getRandomPosition = () => {
+        const left = Math.floor(Math.random() * window.innerWidth) + 'px';
+        const top = Math.floor(Math.random() * window.innerHeight) + 'px';
+        return { left, top };
+      };
+
+      const handleChangePosition = (index) => {
+        const newPositions = { ...positions };
+        newPositions[index] = getRandomPosition();
+        setPositions(newPositions);
+      };
     
       const sendMessage = async () => {
         if (!message.trim()) {
