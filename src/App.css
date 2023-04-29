@@ -549,7 +549,7 @@ tr:nth-child(even) {
   }
 } */
 
-@media (max-width: 868px) {
+@media (max-width: 768px) {
   .right-menu {
     display: none;
   }
