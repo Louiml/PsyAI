@@ -1,8 +1,7 @@
-import React from 'react';
 import './App.css';
+import React from "react";
 
 const parseText = (inputText) => {
-    // const ref = React.createRef();
     const regexBold = /(\*\*.*?\*\*)/g;
     const regexNewline = /(\n)|\\n/g;
     const regexUrl = /(https?:\/\/[^\s]+)/g;
@@ -72,7 +71,7 @@ const parseText = (inputText) => {
         } else if (matches) {
           return (
             <React.Fragment>
-              <img alt={matches[1]} src={matches[2]} />
+              <img alt={matches[1]} id="image" src={matches[2]} />
             </React.Fragment>
           );
         } else if (line.match(regexSettings)) {
