@@ -71,7 +71,7 @@ const parseText = (inputText) => {
         } else if (matches) {
           return (
             <React.Fragment>
-              <img alt={matches[1]} id="image" height={550} width={600} src={matches[2]} />
+              <img alt={matches[1]} id="image" height={180} width={280} src={matches[2]} />
             </React.Fragment>
           );
         } else if (line.match(regexSettings)) {
