@@ -261,6 +261,7 @@ import './App.css';
             return (
               <div className='welcome-div'>
                 <h1 className='welcome-text'>Welcome back to <span style={{ textDecoration: 'underline' }}>PsyAI</span></h1>
+                  <h2>Examples:</h2>
                 <div className='welcome-example'>
                   <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
                   <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>

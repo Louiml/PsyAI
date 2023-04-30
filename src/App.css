@@ -200,7 +200,7 @@ a:active {
 .code-block {
   position: relative;
   background-color: #313338;
-  border-radius: 15px 15px 4px 4px;
+  border-radius: 7px;
   color: rgb(255, 255, 255);
   padding: 4px 6px;
   font-family: monospace;
@@ -500,19 +500,18 @@ tr:nth-child(even) {
 .copy-code-button {
   position: absolute;
   right: 0.6%;
-  top: 1.6%;
+  top: 3%;
   padding: 7px 14px;
-  background-color: #3e414a;
-  border-radius: 0 20px 0 0;
+  background-color: #3e414a00;
   color: #fff;
+  border-radius: 35px;
   transition: all 0.8s;
   border: none;
   cursor: pointer;
 }
 
 .copy-code-button:hover {
-  background-color: #313338;
-  color: #ffffff;
+  background-color: #3e414a00;
 }
 
 .code-header {
@@ -591,7 +590,7 @@ tr:nth-child(even) {
   transform: translate(-50%, -50%);
   overflow-y: auto;
   border-radius: 15px;
-  padding: 85px 95px;
+  padding: 145px 95px;
   color: white;
   background-color: #292929;
 }
@@ -613,4 +612,9 @@ tr:nth-child(even) {
   align-items: center;
   border: 3px dashed rgb(61, 61, 62);
   padding: 30px 40px;
+}
+
+.welcome-btn {
+  margin-left: 15px;
+  border-radius: 10px;
 }
