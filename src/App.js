@@ -74,6 +74,7 @@ import './App.css';
       
         try {
           setIsWelcomeVisible(false);
+          setIsWelcomeAfterClearVisible(false);
           setTyping(true);
           const res = await axios.post('https://chatapi.louiml.net/api/message', { message });
           setTimeout(() => {
@@ -348,6 +349,7 @@ import './App.css';
     
       return (
         <>
+        {showMenu && <Menu />}
         <div className='right-menu'>
           {!isPremiumUser && (
             <>
@@ -377,7 +379,6 @@ import './App.css';
               </button>
               </div>
               </div>
-              {showMenu && <Menu />}
               {isSuggestionMenuOpen && (
                 <form onSubmit={handleSubmit} className='bugForm'>
                   <input
