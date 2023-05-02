@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import parseText from './parseText';
+import playAudio from './icon1.svg'
+import pauseAudio from './icon2.svg'
 import PayPal from "./components/PayPal";
 import './App.css';
 
@@ -10,6 +12,7 @@ import './App.css';
       const [typing, setTyping] = useState(false);
       const [showScrollButton, setShowScrollButton] = useState(false);
       const bottomRef = useRef(null);
+      const [speech, setSpeech] = useState(null);
       const [typingSpeed, setTypingSpeed] = useState(50);
       const [checkout, setCheckOut] = useState(true);
       const [showMenu, setShowMenu] = useState(false);
@@ -22,7 +25,9 @@ import './App.css';
       const [isWelcomeVisible, setIsWelcomeVisible] = useState(true);
       const [isWelcomeAfterClearVisible, setIsWelcomeAfterClearVisible] = useState(false);
       const [isOpen, setIsOpen] = useState(false);
+      const [isPlaying, setIsPlaying] = useState(false);
       const [isClearMenu, setIsClearMenuOpen] = useState(false);
+      const [aiMessage, setAiMessage] = useState('');
       const [isSuggestionMenuOpen, setIsSuggestionMenuOpen] = useState(false);
       const inputRef = useRef(null);
       const sendMessage = async () => {
@@ -32,6 +37,62 @@ import './App.css';
     
         if (message.trim() === '+/[clear') {
           setMessages([]);
+          setMessage('');
+          return;
+        }
+
+        if (message.trim() === '+/[reportmenu') {
+          setIsOpen(true);
+          setIsClearMenuOpen(false);
+          setIsSuggestionMenuOpen(false);
+          setIsWelcomeVisible(false);
+          setShowMenu(false);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[clearmenu') {
+          setIsClearMenuOpen(true);
+          setIsOpen(false);
+          setIsSuggestionMenuOpen(false);
+          setShowMenu(false);
+          setIsWelcomeVisible(false);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[suggestionmenu') {
+          setIsSuggestionMenuOpen(true);
+          setIsOpen(false);
+          setIsClearMenuOpen(false);
+          setShowMenu(false);
+          setIsWelcomeVisible(false);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[welcomemenu') {
+          setIsSuggestionMenuOpen(false);
+          setIsOpen(false);
+          setIsClearMenuOpen(false);
+          setShowMenu(false);
+          setIsWelcomeVisible(true);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[welcomeafterclearmenu') {
+          setIsSuggestionMenuOpen(false);
+          setIsOpen(false);
+          setIsClearMenuOpen(false);
+          setIsWelcomeVisible(false);
+          setShowMenu(false);
+          setIsWelcomeAfterClearVisible(true);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[upgrademenu') {
+          setIsSuggestionMenuOpen(false);
+          setIsOpen(false);
+          setIsClearMenuOpen(false);
+          setIsWelcomeVisible(false);
+          setShowMenu(true);
+          setIsWelcomeAfterClearVisible(false);
           setMessage('');
           return;
         }
@@ -90,11 +151,12 @@ import './App.css';
           }, 5000)
         }, 4000)
           const typingDuration = Math.max(1000, res.data.response.length * typingSpeed);
-      
+
           setMessage('');
           
           setTimeout(() => {
             setMessages([...messages, { text: message, sender: 'user' }, { text: res.data.response, sender: 'ai' }]);
+            setAiMessage(res.data.response);
             setTyping(false);
           }, typingDuration);
         } catch (err) {
@@ -255,7 +317,7 @@ import './App.css';
             e.preventDefault();
             setIsWelcomeAfterClearVisible(false);
             setIsWelcomeVisible(false);
-            setMessage('Who is Doland Trump?');
+            setMessage('Who is Donald Trump?');
           }
 
           const WelcomeAfterClear = () => {
@@ -267,7 +329,7 @@ import './App.css';
                   <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
                   <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
                   <button className='welcome-btn' onClick={example911}>9/11</button>
-                  <button className='welcome-btn' onClick={exampletrump}>Who is Doland Trump?</button>
+                  <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
                 </div>
               </div>
             );
@@ -281,7 +343,7 @@ import './App.css';
               <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
               <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
               <button className='welcome-btn' onClick={example911}>9/11</button>
-              <button className='welcome-btn' onClick={exampletrump}>Who is Doland Trump?</button>
+              <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
             </div>
           </div>
         );
@@ -323,6 +385,48 @@ import './App.css';
           </div>
         );
       };
+
+      const handleSpeech = async () => {
+        setIsPlaying(!isPlaying);
+        const speechSynthesis = window.speechSynthesis;
+        const speech = new SpeechSynthesisUtterance(aiMessage);
+      
+        if (/[א-ת]/.test(aiMessage)) { 
+          const voices = speechSynthesis.getVoices();
+          const voice = voices.find((v) => v.name === 'Google נעים');
+          console.log(voices);
+          speech.voice = voice;
+      
+          speech.lang = 'he-IL';
+        } else if (/[а-яА-Я]/.test(aiMessage)) {
+          const voices = speechSynthesis.getVoices();
+          const voice = voices.find((v) => v.lang === 'ru-RU' && v.name === 'Google русский');
+          speech.voice = voice;
+      
+          speech.lang = 'ru-RU';
+        } else if (/[ا-ي]/.test(aiMessage)) {
+          const voices = speechSynthesis.getVoices();
+          const voice = voices.find((v) => v.lang === 'ar-SA' && v.name === 'Microsoft Naayf');
+          speech.voice = voice;
+        
+          speech.lang = 'ar-SA';
+        } else {
+          speech.lang = 'en-US';
+        }
+        
+        setSpeech(speech);
+        speechSynthesis.speak(speech);
+        
+        if (isPlaying) {
+          speechSynthesis.pause();
+        } else {
+          speechSynthesis.resume();
+        }
+
+        speech.onend = () => {
+          setIsPlaying(false);
+        };
+      };      
       
       useEffect(() => {
         const premiumUser = localStorage.getItem('premiumUser');
@@ -416,6 +520,11 @@ import './App.css';
               {messages.map((msg, idx) => (
                 <div key={idx} className={msg.sender === 'user' ? 'user-message' : 'ai-message'}>
                   {parseText(msg.text)}
+                  {msg.sender === 'ai' && idx === messages.length - 1 && (
+                    <button className='play-audio-button' onClick={handleSpeech}>
+                      {isPlaying ? <img src={pauseAudio} alt='play-audio' height={35} width={35} /> : <img src={playAudio} alt='play-audio' height={35} width={35} />}
+                    </button>
+                  )}
                 </div>
               ))}
               {typing && (

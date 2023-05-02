@@ -618,3 +618,15 @@ tr:nth-child(even) {
   margin-left: 15px;
   border-radius: 10px;
 }
+
+.play-audio-button {
+  background-color: #ffffff00;
+  position: absolute;
+  top: 2%;
+  left: 0%;
+  color: white;
+}
+
+.play-audio-button:hover {
+  background-color: #ffffff00;
+}
