@@ -24,8 +24,6 @@ export default function Paypal() {
           },
           onApprove: async (data, actions) => {
             const order = await actions.order.capture();
-            console.log(order);
-            localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 2592000000 }));
             window.location.reload();  
         },
           onError: (err) => {
