@@ -17,10 +17,11 @@ import './App.css';
       const [checkout, setCheckOut] = useState(true);
       const [showMenu, setShowMenu] = useState(false);
       const [setUpgradeButtonDisabled] = useState(true);
+      const [apiUrl, setApiUrl] = useState('');
       const [inputValue, setInputValue] = useState('');
       const [resultMessage, setResultMessage] = useState('');
       const [isPremiumUser, setIsPremiumUser] = useState(false);
-      const [premiumPrice, setPremiumPrice] = useState("11.7$ [45% OFF]");
+      const [premiumPrice, setPremiumPrice] = useState("4.90$ [45% OFF]");
       const [email, setEmail] = useState('');
       const [isWelcomeVisible, setIsWelcomeVisible] = useState(true);
       const [isWelcomeAfterClearVisible, setIsWelcomeAfterClearVisible] = useState(false);
@@ -39,19 +40,7 @@ import './App.css';
           setIsWelcomeVisible(false);
           setIsWelcomeAfterClearVisible(false);
           setTyping(true);
-          const res = await axios.post('', { message });
-          setTimeout(() => {
-            console.log("%cSEARCHING!", "font-size: 45px; color: yellow; background: black;");
-            setTimeout(() => {
-              console.log("%ca b c d e f g h i j k l m n o p q r s t u v w x y z\nA B C D E F G H I J K L M N O P Q R S T U V W X Y Z\n1 2 3 4 5 6 7 8 9 0\n± ! @ # $ % ^ & * ( ) _ + - = § £ ™ ¡ ¢ ∞ § ¶ • ª º – ≠\nœ ∑ ´ ® † ¥ ¨ ˆ ø π “ ‘ å ß ∂ ƒ © ˙ ˚ ¬ … æ « ` ~ Ω ≈ ç √ ∫ ˜ µ ≤ ≥ ÷ ₩\nÈ É Ê Ë Ē Ė Ę À Á Â Ä Æ Ã Ā Ś Š Ÿ Û Ü Ù Ú Ū Î Ï Í Ī Į Ì Ô Ö Ò Ó Œ Ō Õ Ł Ž Ź Ż Ç Ć Č Ñ Ń\nè é ê ë ē ė ę à á â ä æ ã ā ś š ÿ û ü ù ú ū î ï í ī į ì ô ö ò ó œ ō õ ł ž ź ż ç ć č ñ ń", "font-size: 15px; color: white");
-              setTimeout(() => {
-                console.log("%cGENERATING.", "font-size: 25px; color: red");
-                setTimeout(() => {
-                  console.log("%cANSWER IS ALMOST READY.", "font-size: 35px; color: green");
-              }, 7000)
-            }, 5000)
-          }, 5000)
-        }, 4000)
+          const res = await axios.post(apiUrl, { message });
           const typingDuration = Math.max(1000, res.data.response.length * typingSpeed);
 
           setMessage('');
@@ -111,6 +100,10 @@ import './App.css';
           setIsSuggestionMenuOpen(false);
         } else if (isClearMenu) {
           setIsClearMenuOpen(false);
+        } else if (isWelcomeAfterClearVisible) {
+          setIsWelcomeAfterClearVisible(false);
+        } else if (isWelcomeVisible) {
+          setIsWelcomeVisible(false);
         }
       };
       
@@ -122,6 +115,10 @@ import './App.css';
           setIsSuggestionMenuOpen(false);
         } else if (isClearMenu) {
           setIsClearMenuOpen(false);
+        } else if (isWelcomeAfterClearVisible) {
+          setIsWelcomeAfterClearVisible(false);
+        } else if (isWelcomeVisible) {
+          setIsWelcomeVisible(false);
         }
       };
     
@@ -133,6 +130,10 @@ import './App.css';
           setIsOpen(false);
         } else if (isClearMenu) {
           setIsClearMenuOpen(false);
+        } else if (isWelcomeAfterClearVisible) {
+          setIsWelcomeAfterClearVisible(false);
+        } else if (isWelcomeVisible) {
+          setIsWelcomeVisible(false);
         }
       };
     
@@ -144,6 +145,10 @@ import './App.css';
           setIsOpen(false);
         } else if (isSuggestionMenuOpen) {
           setIsSuggestionMenuOpen(false);
+        } else if (isWelcomeAfterClearVisible) {
+          setIsWelcomeAfterClearVisible(false);
+        } else if (isWelcomeVisible) {
+          setIsWelcomeVisible(false);
         }
       };
     
@@ -233,6 +238,15 @@ import './App.css';
                   <button className='welcome-btn' onClick={example911}>9/11</button>
                   <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
                 </div>
+                {isPremiumUser && (
+                <>
+                  <select id="apiUrl" name="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)}>
+                    <option value="">QHU 1.0</option>
+                    <option value="">QHU 0.5</option>
+                    <option value="">GPT-QHU (Beta & Slow)</option>
+                  </select>
+              </>
+              )}
               </div>
             );
           };
@@ -247,6 +261,15 @@ import './App.css';
               <button className='welcome-btn' onClick={example911}>9/11</button>
               <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
             </div>
+            {isPremiumUser && (
+            <>
+              <select id="apiUrl" name="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)}>
+                <option value="">QHU 1.0</option>
+                <option value="">QHU 0.5</option>
+                <option value="">GPT-QHU (Beta & Slow)</option>
+              </select>
+            </>
+          )}
           </div>
         );
       };
@@ -448,21 +471,23 @@ import './App.css';
             <WelcomeAfterClear />
           ) : null}
           <div className="input-wrapper">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  sendMessage();
-                }
-              }}
-              required={true}
-            />
-            <button onClick={sendMessage} disabled={typing}>
-              Send
-            </button>
-          </div>
+  <textarea
+    type="text"
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    onKeyPress={(e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }}
+    required={true}
+  />
+  <button onClick={sendMessage} disabled={typing}>
+    Send
+  </button>
+</div>
+
           {showScrollButton && (
             <button className="scroll-to-bottom-btn" onClick={scrollToBottom}>
               ⬇
