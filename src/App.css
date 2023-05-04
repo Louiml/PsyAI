@@ -4,7 +4,7 @@
   --text-color: #333;
   --user-message-bg: #66bb6a;
   --ai-message-bg: #e0e0e0;
-  --input-bg: #ffffff;
+  --textarea-bg: #ffffff;
   --button-bg: #66bb6a;
   --button-bg-hover: #4caf50;
   --scrollbar-thumb: #a3a3a3;
@@ -16,7 +16,7 @@
   --text-color: #f5f5f5;
   --user-message-bg: #4caf50;
   --ai-message-bg: #555555;
-  --input-bg: #2b2b2b;
+  --textarea-bg: #2b2b2b;
   --button-bg: #ffffff;
   --button-bg-hover: #66bb6a;
   --scrollbar-thumb: #777777;
@@ -103,6 +103,21 @@ body {
   max-width: 500px;
 }
 
+textarea[type='text'] {
+  border: none;
+  border-radius: 25px;
+  flex-grow: 1;
+  color: white;
+  width: 80%;
+  max-width: 500px;
+  resize: none;
+  background-color: #2b2b2b;
+  padding: 10px 20px;
+  outline: none;
+  font-size: 16px;
+  font-family:sans-serif;
+}
+
 input[type='text'] {
   border: none;
   border-radius: 25px;
@@ -110,10 +125,12 @@ input[type='text'] {
   color: white;
   width: 80%;
   max-width: 500px;
+  resize: none;
   background-color: #2b2b2b;
   padding: 10px 20px;
   outline: none;
   font-size: 16px;
+  font-family:sans-serif;
 }
 
 button {
@@ -200,7 +217,7 @@ a:active {
 .code-block {
   position: relative;
   background-color: #313338;
-  border-radius: 15px 15px 4px 4px;
+  border-radius: 7px;
   color: rgb(255, 255, 255);
   padding: 4px 6px;
   font-family: monospace;
@@ -318,16 +335,31 @@ a:active {
 .menu {
   background-color: #212020;
   user-select: none;
-  position: fixed;
-  left: 43%;
-  top: 35%;
   padding: 20px;
+  width: 40%;
+  height: 270px;
   border-radius: 10px;
-  width: 300px;
-  display: flex;
+  flex: 1;
+  scrollbar-color: #35353d #393939 !important;
+  scrollbar-width: thin !important;
   flex-direction: column;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: auto;
   align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background-color: #3c3b4e;
+  border-radius: 5px;
 }
 
 .menu .shop-menu-input {
@@ -380,6 +412,10 @@ a:active {
 .text-info:hover {
   color: #5ec5ed;
   cursor: pointer;
+}
+
+.span-color {
+  color: white;
 }
 
 .bugForm {
@@ -481,19 +517,18 @@ tr:nth-child(even) {
 .copy-code-button {
   position: absolute;
   right: 0.6%;
-  top: 1.6%;
+  top: 3%;
   padding: 7px 14px;
-  background-color: #3e414a;
-  border-radius: 0 20px 0 0;
+  background-color: #3e414a00;
   color: #fff;
+  border-radius: 35px;
   transition: all 0.8s;
   border: none;
   cursor: pointer;
 }
 
 .copy-code-button:hover {
-  background-color: #313338;
-  color: #ffffff;
+  background-color: #3e414a00;
 }
 
 .code-header {
@@ -529,3 +564,108 @@ tr:nth-child(even) {
     top: 50%;
   }
 } */
+
+@media (max-width: 768px) {
+  .right-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 968px) {
+  .right-menu-nim-buttons {
+    display: none;
+  }
+}
+
+@media (max-width: 868px) {
+  .menu {
+    height: 260px;
+  }
+}
+
+@media (max-width: 868px) {
+  .welcome-div {
+    height: 150px;
+    width: 400px;
+}
+}
+
+@media (max-width: 868px) {
+  #image {
+    display: none;
+  }
+}
+
+.welcome-div {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  user-select: none;
+  flex: 1;
+  scrollbar-color: #35353d #393939 !important;
+  scrollbar-width: thin !important;
+  transform: translate(-50%, -50%);
+  overflow-y: auto;
+  border-radius: 15px;
+  padding: 145px 95px;
+  color: white;
+  background-color: #292929;
+}
+
+.welcome-text {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.welcome-text2 {
+  font-size: 30px;
+  color: aliceblue;
+}
+
+.welcome-example {
+  color: lightgray;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  border: 3px dashed rgb(61, 61, 62);
+  padding: 30px 40px;
+}
+
+.welcome-btn {
+  margin-left: 15px;
+  border-radius: 10px;
+}
+
+.play-audio-button {
+  background-color: #ffffff00;
+  position: absolute;
+  top: 2%;
+  left: 0%;
+  color: white;
+}
+
+.play-audio-button:hover {
+  background-color: #ffffff00;
+}
+
+#apiUrl {
+  background-color: #343436;
+  border: none;
+  color: white;
+  width: 35%; 
+  word-spacing: 10px;
+  padding: 10px;
+  font-size: 20px;
+  margin-top: 2%;
+}
+
+#apiUrl:hover {
+  background-color: #3a3a3c;
+}
+
+option {
+  color: rgb(255, 255, 255);
+  border: 10px solid #343436;
+  border-radius: 20px;
+}
