@@ -4,7 +4,7 @@
   --text-color: #333;
   --user-message-bg: #66bb6a;
   --ai-message-bg: #e0e0e0;
-  --input-bg: #ffffff;
+  --textarea-bg: #ffffff;
   --button-bg: #66bb6a;
   --button-bg-hover: #4caf50;
   --scrollbar-thumb: #a3a3a3;
@@ -16,7 +16,7 @@
   --text-color: #f5f5f5;
   --user-message-bg: #4caf50;
   --ai-message-bg: #555555;
-  --input-bg: #2b2b2b;
+  --textarea-bg: #2b2b2b;
   --button-bg: #ffffff;
   --button-bg-hover: #66bb6a;
   --scrollbar-thumb: #777777;
@@ -84,6 +84,7 @@ body {
   color: #ffffff;
   padding: 10px;
   max-width: 70%;
+  word-wrap: break-word;
 }
 
 .ai-message {
@@ -93,6 +94,7 @@ body {
   border-radius: 12px;
   padding: 10px;
   max-width: 70%;
+  word-wrap: break-word;
 }
 
 .input-wrapper {
@@ -103,6 +105,21 @@ body {
   max-width: 500px;
 }
 
+textarea[type='text'] {
+  border: none;
+  border-radius: 25px;
+  flex-grow: 1;
+  color: white;
+  width: 80%;
+  max-width: 500px;
+  resize: none;
+  background-color: #2b2b2b;
+  padding: 10px 20px;
+  outline: none;
+  font-size: 16px;
+  font-family:sans-serif;
+}
+
 input[type='text'] {
   border: none;
   border-radius: 25px;
@@ -110,10 +127,12 @@ input[type='text'] {
   color: white;
   width: 80%;
   max-width: 500px;
+  resize: none;
   background-color: #2b2b2b;
   padding: 10px 20px;
   outline: none;
   font-size: 16px;
+  font-family:sans-serif;
 }
 
 button {
@@ -568,8 +587,9 @@ tr:nth-child(even) {
 
 @media (max-width: 868px) {
   .welcome-div {
-    display: none;
-  }
+    height: 150px;
+    width: 400px;
+}
 }
 
 @media (max-width: 868px) {
@@ -629,4 +649,25 @@ tr:nth-child(even) {
 
 .play-audio-button:hover {
   background-color: #ffffff00;
+}
+
+#apiUrl {
+  background-color: #343436;
+  border: none;
+  color: white;
+  width: 35%; 
+  word-spacing: 10px;
+  padding: 10px;
+  font-size: 20px;
+  margin-top: 2%;
+}
+
+#apiUrl:hover {
+  background-color: #3a3a3c;
+}
+
+option {
+  color: rgb(255, 255, 255);
+  border: 10px solid #343436;
+  border-radius: 20px;
 }

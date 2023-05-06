@@ -3,34 +3,14 @@ import React from "react";
 
 const parseText = (inputText) => {
     const regexBold = /(\*\*.*?\*\*)/g;
-    const regexNewline = /(\n)|\\n/g;
+    const regexNewline = /(\n)/g;
     const regexUrl = /(https?:\/\/[^\s]+)/g;
     const regexCode = /(```[\s\S]*?```)/g;
     const regexInlineCode = /(`[^`]*`)/g;
     const regexHyphen = /^-\s+/;
     const regexUnderline = /(_[^_]+_)/g;
-    const regexTableLine = /^\|.*\|$/;
     const regexImage = /^!\[(.*?)\]\((.*?)\)$/;
     const regexSettings = /^-(settings)$/;
-
-    const processTable = (tableLines) => {
-      return (
-        <table>
-          <tbody>
-            {tableLines.map((line, idx) => (
-              <tr key={idx}>
-                {line
-                  .split('|')
-                  .filter((cell) => cell.trim() !== '')
-                  .map((cell, jdx) => (
-                    <td key={jdx}>{cell.trim()}</td>
-                  ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      );
-    };
   
     const processLine = (line) => {
       const matches = line.match(regexImage);
@@ -50,17 +30,6 @@ const parseText = (inputText) => {
               })}
             </strong>
           );
-        } else if (regexTableLine.test(line)) {
-          const tableLines = [line];
-          while (regexTableLine.test(line)) {
-            line = line.substr(line.indexOf('\n') + 1);
-            if (line) {
-              tableLines.push(line);
-            } else {
-              break;
-            }
-          }
-          return processTable(tableLines);
         } else if (line.match(regexHyphen)) {
           line = line.replace(regexHyphen, '• ');
           return (
@@ -685,7 +654,7 @@ const parseText = (inputText) => {
         return processCodeBlock(part);
       }
       return part.split(regexNewline).map((line, idx) => (
-        <React.Fragment key={idx}>
+        <React.Fragment key={idx} style={{ whiteSpace: 'pre-wrap' }}>
           {processLine(line)}
           <br />
         </React.Fragment>

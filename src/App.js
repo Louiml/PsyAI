@@ -17,10 +17,11 @@ import './App.css';
       const [checkout, setCheckOut] = useState(true);
       const [showMenu, setShowMenu] = useState(false);
       const [setUpgradeButtonDisabled] = useState(true);
+      const [apiUrl, setApiUrl] = useState('https://chatapi.louiml.net/api/qhu-1.0');
       const [inputValue, setInputValue] = useState('');
       const [resultMessage, setResultMessage] = useState('');
       const [isPremiumUser, setIsPremiumUser] = useState(false);
-      const [premiumPrice, setPremiumPrice] = useState("11.7$ [45% OFF]");
+      const [premiumPrice, setPremiumPrice] = useState("4.90$ [45% OFF]");
       const [email, setEmail] = useState('');
       const [isWelcomeVisible, setIsWelcomeVisible] = useState(true);
       const [isWelcomeAfterClearVisible, setIsWelcomeAfterClearVisible] = useState(false);
@@ -137,7 +138,7 @@ import './App.css';
           setIsWelcomeVisible(false);
           setIsWelcomeAfterClearVisible(false);
           setTyping(true);
-          const res = await axios.post('https://chatapi.louiml.net/api/message', { message });
+          const res = await axios.post(apiUrl, { message });
           setTimeout(() => {
             console.log("%cSEARCHING!", "font-size: 45px; color: yellow; background: black;");
             setTimeout(() => {
@@ -209,6 +210,10 @@ import './App.css';
           setIsSuggestionMenuOpen(false);
         } else if (isClearMenu) {
           setIsClearMenuOpen(false);
+        } else if (isWelcomeAfterClearVisible) {
+          setIsWelcomeAfterClearVisible(false);
+        } else if (isWelcomeVisible) {
+          setIsWelcomeVisible(false);
         }
       };
       
@@ -220,6 +225,10 @@ import './App.css';
           setIsSuggestionMenuOpen(false);
         } else if (isClearMenu) {
           setIsClearMenuOpen(false);
+        } else if (isWelcomeAfterClearVisible) {
+          setIsWelcomeAfterClearVisible(false);
+        } else if (isWelcomeVisible) {
+          setIsWelcomeVisible(false);
         }
       };
     
@@ -231,6 +240,10 @@ import './App.css';
           setIsOpen(false);
         } else if (isClearMenu) {
           setIsClearMenuOpen(false);
+        } else if (isWelcomeAfterClearVisible) {
+          setIsWelcomeAfterClearVisible(false);
+        } else if (isWelcomeVisible) {
+          setIsWelcomeVisible(false);
         }
       };
     
@@ -242,6 +255,10 @@ import './App.css';
           setIsOpen(false);
         } else if (isSuggestionMenuOpen) {
           setIsSuggestionMenuOpen(false);
+        } else if (isWelcomeAfterClearVisible) {
+          setIsWelcomeAfterClearVisible(false);
+        } else if (isWelcomeVisible) {
+          setIsWelcomeVisible(false);
         }
       };
     
@@ -331,6 +348,15 @@ import './App.css';
                   <button className='welcome-btn' onClick={example911}>9/11</button>
                   <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
                 </div>
+                {isPremiumUser && (
+                <>
+                  <select id="apiUrl" name="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)}>
+                    <option value="https://chatapi.louiml.net/api/qhu-1.0">QHU 1.0</option>
+                    <option value="https://chatapi.louiml.net/api/qhu-0.5">QHU 0.5</option>
+                    <option value="https://primaryhauntingdownload.tupac3.repl.co/api/gptqhu_beta">GPT-QHU (Beta & Slow)</option>
+                  </select>
+              </>
+              )}
               </div>
             );
           };
@@ -345,6 +371,15 @@ import './App.css';
               <button className='welcome-btn' onClick={example911}>9/11</button>
               <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
             </div>
+            {isPremiumUser && (
+            <>
+              <select id="apiUrl" name="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)}>
+                <option value="https://chatapi.louiml.net/api/qhu-1.0">QHU 1.0</option>
+                <option value="https://chatapi.louiml.net/api/qhu-0.5">QHU 0.5</option>
+                <option value="https://primaryhauntingdownload.tupac3.repl.co/api/gptqhu_beta">GPT-QHU (Beta & Slow)</option>
+              </select>
+            </>
+          )}
           </div>
         );
       };
@@ -546,21 +581,23 @@ import './App.css';
             <WelcomeAfterClear />
           ) : null}
           <div className="input-wrapper">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  sendMessage();
-                }
-              }}
-              required={true}
-            />
-            <button onClick={sendMessage} disabled={typing}>
-              Send
-            </button>
-          </div>
+  <textarea
+    type="text"
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    onKeyPress={(e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }}
+    required={true}
+  />
+  <button onClick={sendMessage} disabled={typing}>
+    Send
+  </button>
+</div>
+
           {showScrollButton && (
             <button className="scroll-to-bottom-btn" onClick={scrollToBottom}>
               ⬇
