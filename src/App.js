@@ -353,6 +353,7 @@ import './App.css';
                   <select id="apiUrl" name="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)}>
                     <option value="https://chatapi.louiml.net/api/qhu-1.0">QHU 1.0</option>
                     <option value="https://chatapi.louiml.net/api/qhu-0.5">QHU 0.5</option>
+                    <option value="https://chatapi.louiml.net/api/flag-guess">Flag Guess</option>
                     <option value="https://primaryhauntingdownload.tupac3.repl.co/api/gptqhu_beta">GPT-QHU (Beta & Slow)</option>
                   </select>
               </>
@@ -376,6 +377,7 @@ import './App.css';
               <select id="apiUrl" name="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)}>
                 <option value="https://chatapi.louiml.net/api/qhu-1.0">QHU 1.0</option>
                 <option value="https://chatapi.louiml.net/api/qhu-0.5">QHU 0.5</option>
+                <option value="https://chatapi.louiml.net/api/flag-guess">Flag Guess</option>
                 <option value="https://primaryhauntingdownload.tupac3.repl.co/api/gptqhu_beta">GPT-QHU (Beta & Slow)</option>
               </select>
             </>
