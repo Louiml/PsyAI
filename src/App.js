@@ -478,13 +478,13 @@ import './App.css';
       
       useEffect(() => {
         const pathname = window.location.pathname;
-        if (pathname === "PsyAI/qhu-1.0") {
+        if (pathname === "/PsyAI/qhu-1.0") {
           setApiUrl("https://chatapi.louiml.net/api/qhu-1.0");
-        } else if (pathname === "PsyAI/qhu-0.5") {
+        } else if (pathname === "/PsyAI/qhu-0.5") {
           setApiUrl("https://chatapi.louiml.net/api/qhu-0.5");
-        } else if (pathname === "PsyAI/flag-guess") {
+        } else if (pathname === "/PsyAI/flag-guess") {
           setApiUrl("https://chatapi.louiml.net/api/flag-guess");
-        } else if (pathname === "PsyAI/gpt-qhu") {
+        } else if (pathname === "/PsyAI/gpt-qhu") {
           setApiUrl("https://primaryhauntingdownload.tupac3.repl.co/api/gptqhu_beta");
         }
         const premiumUser = localStorage.getItem('premiumUser');
