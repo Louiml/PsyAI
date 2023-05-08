@@ -588,8 +588,14 @@ tr:nth-child(even) {
 @media (max-width: 868px) {
   .welcome-div {
     height: 150px;
-    width: 400px;
+    width: 300px;
 }
+}
+
+@media (max-width: 868px) {
+  .welcome-btn1 {
+    display: none;
+  }
 }
 
 @media (max-width: 868px) {
@@ -610,7 +616,7 @@ tr:nth-child(even) {
   transform: translate(-50%, -50%);
   overflow-y: auto;
   border-radius: 15px;
-  padding: 145px 95px;
+  padding: 65px 95px;
   color: white;
   background-color: #292929;
 }
@@ -635,6 +641,11 @@ tr:nth-child(even) {
 }
 
 .welcome-btn {
+  margin-left: 15px;
+  border-radius: 10px;
+}
+
+.welcome-btn1 {
   margin-left: 15px;
   border-radius: 10px;
 }
@@ -670,4 +681,13 @@ option {
   color: rgb(255, 255, 255);
   border: 10px solid #343436;
   border-radius: 20px;
+}
+
+.premium-tag {
+  background-color: #fbf3a0;
+  color: #8c7516;
+  border-radius: 5px;
+  padding: 15px 20px;
+  font-size: 15px;
+  margin-left: -10px;
 }

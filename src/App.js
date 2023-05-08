@@ -341,7 +341,12 @@ import './App.css';
             return (
               <div className='welcome-div'>
                 <h1 className='welcome-text'>Welcome back to <span style={{ textDecoration: 'underline' }}>PsyAI</span></h1>
-                  <h2>Examples:</h2>
+                {isPremiumUser && (
+                <>
+                  <span className='premium-tag'>Premium</span>
+                </>
+                )}
+                <h2>Examples:</h2>
                 <div className='welcome-example'>
                   <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
                   <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
@@ -366,11 +371,17 @@ import './App.css';
         return (
           <div className='welcome-div'>
             <h1 className='welcome-text'>Welcome to <span style={{ textDecoration: 'underline' }}>PsyAI</span></h1>
+            {isPremiumUser && (
+              <>
+                <span className='premium-tag'>Premium</span>
+              </>
+            )}
+            <h2>Examples:</h2>
             <div className='welcome-example'>
               <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
               <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
-              <button className='welcome-btn' onClick={example911}>9/11</button>
-              <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
+              <button className='welcome-btn1' onClick={example911}>9/11</button>
+              <button className='welcome-btn1' onClick={exampletrump}>Who is Donald Trump?</button>
             </div>
             {isPremiumUser && (
             <>
@@ -466,6 +477,16 @@ import './App.css';
       };      
       
       useEffect(() => {
+        const pathname = window.location.pathname;
+        if (pathname === "/qhu-1.0") {
+          setApiUrl("https://chatapi.louiml.net/api/qhu-1.0");
+        } else if (pathname === "/qhu-0.5") {
+          setApiUrl("https://chatapi.louiml.net/api/qhu-0.5");
+        } else if (pathname === "/flag-guess") {
+          setApiUrl("https://chatapi.louiml.net/api/flag-guess");
+        } else if (pathname === "/gpt-qhu") {
+          setApiUrl("https://primaryhauntingdownload.tupac3.repl.co/api/gptqhu_beta");
+        }
         const premiumUser = localStorage.getItem('premiumUser');
         if (premiumUser) {
           setTypingSpeed(2);
