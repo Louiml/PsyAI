@@ -21,7 +21,7 @@ import './App.css';
       const [inputValue, setInputValue] = useState('');
       const [resultMessage, setResultMessage] = useState('');
       const [isPremiumUser, setIsPremiumUser] = useState(false);
-      const [premiumPrice, setPremiumPrice] = useState("4.90$ [45% OFF]");
+      const [premiumPrice, setPremiumPrice] = useState("2.90$ [65% OFF]");
       const [email, setEmail] = useState('');
       const [isWelcomeVisible, setIsWelcomeVisible] = useState(true);
       const [isWelcomeAfterClearVisible, setIsWelcomeAfterClearVisible] = useState(false);
