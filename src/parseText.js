@@ -313,9 +313,23 @@ const parseText = (inputText) => {
             </>
           );
         } else {
+          const words = line.split(/([\s.()[\]{}<>=&|+-/*%!?,;:])+/);
+          const highlightedWords = words.map((word, j) => {
+          if (word === '(' || word === ')' || word === '[' || word === ']' || word === '{' || word === '}' || word === '<' || word === '>' || word === '=' || word === '&' || word === '|' || word === '+' || word === '-' || word === '*' || word === '/' || word === '%' || word === '!' || word === ',' || word === ';' || word === ':') {
+            return <span key={j} style={{ color: '#D3D3D3' }}>{word}</span>;
+          } else if (word === 'class' || word === 'new' || word === 'return' || word === 'void' || word === 'string' || word === 'int' || word === 'bool' || word === 'true' || word === 'false' || word === 'if' || word === 'else' || word === 'switch' || word === 'case' || word === 'default' || word === 'while' || word === 'do' || word === 'for' || word === 'foreach' || word === 'in' || word === 'break' || word === 'continue' || word === 'try' || word === 'catch' || word === 'finally' || word === 'throw' || word === 'using' || word === 'namespace' || word === 'public' || word === 'private' || word === 'protected' || word === 'static' || word === 'readonly' || word === 'abstract' || word === 'interface' || word === 'virtual' || word === 'override' || word === 'event' || word === 'delegate' || word === 'params' || word === 'out' || word === 'ref' || word === 'this' || word === 'base') {
+            return <span key={j} style={{ color: '#2e95d3' }}>{word}</span>;
+          } else if (word.match(/^[0-9]+$/)) {
+            return <span key={j} style={{ color: '#df3079' }}>{word}</span>;
+          } else if (word.startsWith('"') && word.endsWith('"')) {
+            return <span key={j} style={{ color: '#608e72' }}>{word}</span>;
+          } else {
+            return <span key={j}>{word}</span>;
+          }
+          });
           return (
             <>
-              <span key={i}>{line}</span> 
+              <span key={i}>{highlightedWords}</span> 
               <br />
             </>
           );
@@ -331,7 +345,7 @@ const parseText = (inputText) => {
           type="button"
           className="copy-code-button"
           onClick={() => {
-            const codeText = codeBlock.slice(6, -3);
+            const codeText = codeBlock.slice(7, -3);
             navigator.clipboard.writeText(codeText);
             alert("Code copied to clipboard!");
           }}
