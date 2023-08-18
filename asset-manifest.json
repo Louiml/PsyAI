@@ -1,17 +1,18 @@
 {
   "files": {
-    "main.css": "/PsyAI/static/css/main.fea81ca7.css",
-    "main.js": "/PsyAI/static/js/main.6633a6b1.js",
+    "main.css": "/PsyAI/static/css/main.03d01b4e.css",
+    "main.js": "/PsyAI/static/js/main.4a152bd6.js",
     "static/js/787.e5e305d5.chunk.js": "/PsyAI/static/js/787.e5e305d5.chunk.js",
     "index.html": "/PsyAI/index.html",
+    "static/media/clipboard.svg": "/PsyAI/static/media/clipboard.2a06de750926f71f14ccff769e63c36a.svg",
     "static/media/icon1.svg": "/PsyAI/static/media/icon1.7561fc89dca8be45d28478ddd1c0c53f.svg",
     "static/media/icon2.svg": "/PsyAI/static/media/icon2.55dbefac7166788cb0053354bc24240d.svg",
-    "main.fea81ca7.css.map": "/PsyAI/static/css/main.fea81ca7.css.map",
-    "main.6633a6b1.js.map": "/PsyAI/static/js/main.6633a6b1.js.map",
+    "main.03d01b4e.css.map": "/PsyAI/static/css/main.03d01b4e.css.map",
+    "main.4a152bd6.js.map": "/PsyAI/static/js/main.4a152bd6.js.map",
     "787.e5e305d5.chunk.js.map": "/PsyAI/static/js/787.e5e305d5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fea81ca7.css",
-    "static/js/main.6633a6b1.js"
+    "static/css/main.03d01b4e.css",
+    "static/js/main.4a152bd6.js"
   ]
 }
