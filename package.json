@@ -2,7 +2,7 @@
   "name": "psyai",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://funmmer.github.io/PsyAI/",
+  "homepage": "https://chat.louiml.net/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -15,6 +15,7 @@
     "react-markdown": "^8.0.7",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
+    "react-select": "^5.7.4",
     "react-syntax-highlighter": "^15.5.0",
     "rehype-highlight": "^6.0.0",
     "unist-util-visit": "^4.1.2",
