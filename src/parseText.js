@@ -1,37 +1,119 @@
 import './App.css';
-import React from "react";
+import clipboardIcon from './clipboard.svg'
+import React from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { gruvboxDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import PayPal from "./components/PayPal";
 
 const parseText = (inputText) => {
-    const regexBold = /(\*\*.*?\*\*)/g;
-    const regexNewline = /(\n)|\\n/g;
-    const regexUrl = /(https?:\/\/[^\s]+)/g;
-    const regexCode = /(```[\s\S]*?```)/g;
-    const regexInlineCode = /(`[^`]*`)/g;
-    const regexHyphen = /^-\s+/;
-    const regexUnderline = /(_[^_]+_)/g;
-    const regexTableLine = /^\|.*\|$/;
-    const regexImage = /^!\[(.*?)\]\((.*?)\)$/;
-    const regexSettings = /^-(settings)$/;
+  const regexHr = /(- \* \*)/g;
+  const regexNewline = /\r?\n/;
+  const regexBold = /(\*\*.*?\*\*)/g;
+  const regexUrl = /(https?:\/\/[^\s]+)/g;
+  const regexInlineCode = /(`[^`]*`)/g;
+  const regexHyphen = /^-\s+/;
+  const regexHyphen2 = /^\*\s+/;
+  const regexUnderline = /(_[^_]+_)/g;
+  const regexImage = /^!\[(.*?)\]\((.*?)\)$/m;
+  const regexSettings = /^-(payment)$/;
 
-    const processTable = (tableLines) => {
-      return (
-        <table>
-          <tbody>
-            {tableLines.map((line, idx) => (
-              <tr key={idx}>
-                {line
-                  .split('|')
-                  .filter((cell) => cell.trim() !== '')
-                  .map((cell, jdx) => (
-                    <td key={jdx}>{cell.trim()}</td>
-                  ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      );
-    };
+  const regexCodeBlock = /```(javascript|js|typescript|ts|cpp|c\+\+|cc|c|assembly|asm|ruby|lua|xml|toml|yaml|yml|ino|arduino|python|py|html|css|json|md|markdown|rs|rust|java|kotlin|)(\w*)\n([\s\S]*?)```/g;
+  let codeBlocks = [];
+  let match;
+  while ((match = regexCodeBlock.exec(inputText)) !== null) {
+    let language = match[1];
+    if (language === 'cpp') language = 'cpp';
+    else if (language === 'c++') language = 'cpp';
+    else if (language === 'cc') language = 'cpp';
+    else if (language === 'c') language = 'c';
+    else if (language === 'xml') language = 'xml';
+    else if (language === 'toml') language = 'toml';
+    else if (language === 'yaml' || language === 'yml') language = 'yaml';
+    else if (language === 'assembly') language = 'asm6502';
+    else if (language === 'asm') language = 'asm6502';
+    else if (language === 'lua') language = 'lua';
+    else if (language === 'ruby') language = 'ruby';
+    else if (language === 'js') language = 'javacript';
+    else if (language === 'javacript') language = 'javacript';
+    else if (language === 'ts') language = 'typescript';
+    else if (language === 'typescript') language = 'typescript';
+    else if (language === 'ino') language = 'ino';
+    else if (language === 'arduino') language = 'ino';
+    else if (language === 'python') language = 'python';
+    else if (language === 'py') language = 'python';
+    else if (language === 'html') language = 'html';
+    else if (language === 'css') language = 'css';
+    else if (language === 'json') language = 'json';
+    else if (language === 'md') language = 'markdown';
+    else if (language === 'markdown') language = 'markdown';
+    else if (language === 'rs' || language === 'rust') language = 'rust';
+    else if (language === 'java') language = 'java';
+    else if (language === 'kt' || language === 'kotlin') language = 'kotlin';
+
+    let code = match[3].split('\n').filter(line => line.trim() !== '').join('\n');
+
+    codeBlocks.push({ language, code });
+  }
+
+  const textLanguage = (codeLanguage) => {
+    let language = "";
   
+    if (codeLanguage === "cpp" || codeLanguage === "c++" || codeLanguage === "cc") {
+      language = "C++";
+    } else if (codeLanguage === "c") {
+      language = "C";
+    } else if (codeLanguage === "asm6502") {
+      language = "Assembly";
+    } else if (codeLanguage === "javascript" || codeLanguage === "js") {
+      language = "JavaScript";
+    } else if (codeLanguage === "typescript" || codeLanguage === "ts") {
+      language = "Typescript";
+    } else if (codeLanguage === "lua") {
+      language = "Lua";
+    } else if (codeLanguage === "ruby") {
+      language = "Ruby";
+    } else if (codeLanguage === "xml") {
+      language = "XML";
+    } else if (codeLanguage === "toml") {
+      language = "TOML";
+    } else if (codeLanguage === "yaml" || codeLanguage === "yml") {
+      language = "Yaml";
+    } else if (codeLanguage === "ino" || codeLanguage === "arduino") {
+      language = "Arduino";
+    } else if (codeLanguage === "py" || codeLanguage === "python") {
+      language = "Python";
+    } else if (codeLanguage === "html") {
+      language = "HRML";
+    } else if (codeLanguage === "css") {
+      language = "CSS";
+    } else if (codeLanguage === "json") {
+      language = "JSON";
+    } else if (codeLanguage === "markdown") {
+      language = "Markdown";
+    } else if (codeLanguage === "rust") {
+      language = "Rust";
+    } else if (codeLanguage === "kt" || codeLanguage === "kotlin") {
+      language = "Kotlin";
+    } else if (codeLanguage === "java") {
+      language = "Java";
+    } else {
+      language = "Code Snippet"
+    }
+  
+    return language;
+  };
+
+  inputText = inputText.replace(regexCodeBlock, 'CODE_BLOCK_PLACEHOLDER');
+
+  const copyCode = (code) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = code;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+  };  
+
     const processLine = (line) => {
       const matches = line.match(regexImage);
       return line.split(regexBold).map((part, index) => {
@@ -50,19 +132,21 @@ const parseText = (inputText) => {
               })}
             </strong>
           );
-        } else if (regexTableLine.test(line)) {
-          const tableLines = [line];
-          while (regexTableLine.test(line)) {
-            line = line.substr(line.indexOf('\n') + 1);
-            if (line) {
-              tableLines.push(line);
-            } else {
-              break;
-            }
-          }
-          return processTable(tableLines);
+        } else if (line.match(regexHr)) {
+          return (
+            <React.Fragment>
+              <hr />
+            </React.Fragment>
+          );
         } else if (line.match(regexHyphen)) {
-          line = line.replace(regexHyphen, '• ');
+          line = line.replace(regexHyphen, '');
+          return (
+            <React.Fragment>
+              <strong><span className="non-select">• </span>{processLine(line)}</strong>
+            </React.Fragment>
+          );
+        } else if (line.match(regexHyphen2)) {
+          line = line.replace(regexHyphen2, '- ');
           return (
             <React.Fragment>
               <strong>{processLine(line)}</strong>
@@ -77,6 +161,7 @@ const parseText = (inputText) => {
         } else if (line.match(regexSettings)) {
           return (
             <React.Fragment>
+              <PayPal />
             </React.Fragment>
           );
         }
@@ -111,588 +196,45 @@ const parseText = (inputText) => {
             });
         });
     };
-  
-    const processCodeBlock = (codeBlock) => {
-      const code = codeBlock.slice(3, -3);
-      // const p = document.createElement('p');
-      const header = (
-        <div className="code-header">
-          <u>Code snippet</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(3, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-          // ref={ref} onMouseEnter={() => {
-          //   p.textContent = 'Copy Code';
-          //   p.className = 'copy-code-text';
-          //   document.body.appendChild(p);
-          // }} onMouseLeave={() => {
-          //   document.body.removeChild(p);
-          // }}  
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-
-    const processCodeBlockCMD = (codeBlock) => {
-      const codeLines = codeBlock.slice(7, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('REM')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>Console Command</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(7, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-
-    const processCodeBlockJS = (codeBlock) => {
-      const codeLines = codeBlock.slice(6, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('//')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>JavaScript</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(6, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-
-    const processCodeBlockJava = (codeBlock) => {
-      const codeLines = codeBlock.slice(8, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('//')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>Java</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(8, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-
-    const processCodeBlockAsm = (codeBlock) => {
-      const codeLines = codeBlock.slice(7, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith(';')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>Assembly</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(7, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-
-    const processCodeBlockCs = (codeBlock) => {
-      const codeLines = codeBlock.slice(6, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('//')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>C#</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(6, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-
-    const processCodeBlockCpp = (codeBlock) => {
-      const codeLines = codeBlock.slice(7, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('//')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          const words = line.split(' ');
-          const highlightedWords = words.map((word, j) => {
-            if (word.includes('int') || word.includes('return') || word.includes('void') || word.includes('double') || word.includes('float') || word.includes('const') || word.includes('char') || word.includes('using') || word.includes('namespace')) {
-              return <span key={j} style={{ color: '#2e95d3' }}>{word} </span>;
-            } else if (word.includes('()')) {
-              return <span key={j} style={{ color: '#da2737' }}>{word} </span>;
-            } else if (word.includes('#include')) {
-              return <span key={j} style={{ color: '#e9950c' }}>{word} </span>;
-            } else if (word.includes('1') || word.includes('2') || word.includes('3') || word.includes('4') || word.includes('5') || word.includes('6') || word.includes('7') || word.includes('8') || word.includes('9') || word.includes('0')) {
-              return <span key={j} style={{ color: '#df3079' }}>{word} </span>;
-            } else if (word.startsWith('"') + word.endsWith('"')) {
-              return <span key={j} style={{ color: '#608e72' }}>{word} </span>;
-            } else if (word.startsWith('<') + word.endsWith('>')) {
-              return <span key={j} style={{ color: '#00a67d' }}>{word} </span>;
-            } else {
-              return <span key={j}>{word} </span>;
-            }
-          });
-          return (
-            <>
-              <span key={i}>{highlightedWords}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>C++</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(7, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-    
-    const processCodeBlockC = (codeBlock) => {
-      const codeLines = codeBlock.slice(5, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('//')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>C</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(5, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };    
-
-    const processCodeBlockTs = (codeBlock) => {
-      const codeLines = codeBlock.slice(6, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('//')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>TypeScript</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(6, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-
-    const processCodeBlockPy = (codeBlock) => {
-      const codeLines = codeBlock.slice(6, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('#')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>Python</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(6, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-
-    const processCodeBlockChavascript = (codeBlock) => {
-      const codeLines = codeBlock.slice(15, -3).split('\n');
-      const code = codeLines.map((line, i) => {
-        if (line.trim().startsWith('//')) {
-          return (
-            <>
-              <span key={i} style={{ color: 'green' }}>{line}</span>
-              <br />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <span key={i}>{line}</span> 
-              <br />
-            </>
-          );
-        }
-      });
-      const header = (
-        <div className="code-header">
-          <u>Chavascript</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = codeBlock.slice(15, -3);
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-    
-    const processCodeBlockOutput = (codeBlock) => {
-      const code = codeBlock.slice(10, -3);
-      const header = (
-        <div className="code-header">
-          <u>Output</u>
-          </div>
-      );
-      const copyButton = (
-        <button
-          type="button"
-          className="copy-code-button"
-          onClick={() => {
-            const codeText = code;
-            navigator.clipboard.writeText(codeText);
-            alert("Code copied to clipboard!");
-          }}
-        >
-          copy
-        </button>
-      );
-      return (
-        <pre className="code-block">
-          {header}
-          {code}
-          {copyButton}
-        </pre>
-      );
-    };
-  
-    const parts = inputText.split(regexCode);
+    const parts = inputText.split(regexNewline);
     const processedParts = parts.map((part, index) => {
-      if (part.startsWith('```cmd') && part.endsWith('```')) {
-        return processCodeBlockCMD(part);
-      } else if (part.startsWith('```js') && part.endsWith('```')) {
-        return processCodeBlockJS(part);
-      } else if (part.startsWith('```java') && part.endsWith('```')) {
-        return processCodeBlockJava(part);
-      } else if (part.startsWith('```asm') && part.endsWith('```')) {
-        return processCodeBlockAsm(part);
-      } else if (part.startsWith('```chavascript') && part.endsWith('```')) {
-        return processCodeBlockChavascript(part);
-      } else if (part.startsWith('```cs') && part.endsWith('```')) {
-        return processCodeBlockCs(part);
-      } else if (part.startsWith('```cpp') && part.endsWith('```')) {
-        return processCodeBlockCpp(part);
-      } else if (part.startsWith('```c') && part.endsWith('```')) {
-        return processCodeBlockC(part);
-      } else if (part.startsWith('```ts') && part.endsWith('```')) {
-        return processCodeBlockTs(part);
-      } else if (part.startsWith('```py') && part.endsWith('```')) {
-        return processCodeBlockPy(part);
-      } else if (part.startsWith('```output') && part.endsWith('```')) {
-        return processCodeBlockOutput(part);
+      if (part === 'CODE_BLOCK_PLACEHOLDER') {
+        const codeBlock = codeBlocks.shift();
+        return (
+          <>
+            <br />
+            <div className='syntax-code-block-tab'>
+              <span className='syntax-code-block-tab-text-language'>{textLanguage(codeBlock.language)}</span>
+              <button
+                onClick={() => copyCode(codeBlock.code)}
+                className='syntax-code-block-tab-copy-code-button'
+              >
+                <img alt="copy" src={clipboardIcon} draggable={false} width={20} />
+                copy
+              </button>
+            </div>
+            <SyntaxHighlighter 
+              className="syntax-code-block" 
+              language={codeBlock.language} 
+              style={gruvboxDark} 
+              showLineNumbers={true}
+              wrapLongLines={true}  
+              key={index}
+            >
+              {codeBlock.code}
+            </SyntaxHighlighter>
+          </>
+        );
       }
-      else if (part.startsWith('```') && part.endsWith('```')) {
-        return processCodeBlock(part);
-      }
-      return part.split(regexNewline).map((line, idx) => (
-        <React.Fragment key={idx}>
-          {processLine(line)}
+      return (
+        <React.Fragment key={index} style={{ whiteSpace: 'pre-wrap' }}>
+          {processLine(part)}
           <br />
         </React.Fragment>
-      ));
+      );
     });
-  
-    return processedParts;
-  };
+
+  return processedParts;
+};
 
   export default parseText;
