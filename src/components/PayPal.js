@@ -1,41 +1,59 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
+import useScript from "./useScript";
+
+const PRODUCT_DESCRIPTION = "Premium Plan (2 Months)";
+const PRODUCT_PRICE = 14.90;
+const CURRENCY_CODE = "USD";
+const EXPIRY_TIME = 60 * 24 * 60 * 60 * 1000; 
 
 export default function Paypal() {
-  const [rendered, setRendered] = useState(false);
   const paypal = useRef();
+  const { error, loaded } = useScript();
+
+  const handleApprove = useCallback(async (data, actions) => {
+    const order = await actions.order.capture();
+    console.log(order);
+    setPremiumUserStatus(true);
+  }, []);
+
+  const setPremiumUserStatus = (status) => {
+    localStorage.setItem('premiumUser', JSON.stringify({ status: status, expiry: Date.now() + EXPIRY_TIME }));
+    window.location.reload();
+  };
 
   useEffect(() => {
-    if (!rendered) {
+    if (loaded && !error) {
       window.paypal
         .Buttons({
+          style: {
+            color: 'gold',
+          },
           createOrder: (data, actions, err) => {
             return actions.order.create({
               intent: "CAPTURE",
               purchase_units: [
                 {
-                  description: "Premium Plan",
+                  description: PRODUCT_DESCRIPTION,
                   amount: {
-                    currency_code: "USD",
-                    value: 4.90,
+                    currency_code: CURRENCY_CODE,
+                    value: PRODUCT_PRICE,
                   },
                 },
               ],
             });
           },
-          onApprove: async (data, actions) => {
-            const order = await actions.order.capture();
-            console.log(order);
-            localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 2592000000 }));
-            window.location.reload();  
-        },
+          onApprove: handleApprove,
           onError: (err) => {
-            console.log(err);
+            console.error("Paypal error:", err);
           },
         })
         .render(paypal.current);
-      setRendered(true);
     }
-  }, [rendered]);
+  }, [loaded, error, handleApprove]);
+
+  if (error) {
+    return <div>PayPal SDK could not be loaded.</div>;
+  }
 
   return (
     <div ref={paypal}></div>
