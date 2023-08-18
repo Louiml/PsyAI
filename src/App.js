@@ -4,6 +4,7 @@ import parseText from './parseText';
 import playAudio from './icon1.svg'
 import pauseAudio from './icon2.svg'
 import PayPal from "./components/PayPal";
+import Select from 'react-select'
 import './App.css';
 
   const App = () => {
@@ -13,7 +14,7 @@ import './App.css';
       const [showScrollButton, setShowScrollButton] = useState(false);
       const bottomRef = useRef(null);
       const [speech, setSpeech] = useState(null);
-      const [typingSpeed, setTypingSpeed] = useState(50);
+      const [typingSpeed, setTypingSpeed] = useState(15);
       const [checkout, setCheckOut] = useState(true);
       const [showMenu, setShowMenu] = useState(false);
       const [setUpgradeButtonDisabled] = useState(true);
@@ -21,7 +22,7 @@ import './App.css';
       const [inputValue, setInputValue] = useState('');
       const [resultMessage, setResultMessage] = useState('');
       const [isPremiumUser, setIsPremiumUser] = useState(false);
-      const [premiumPrice, setPremiumPrice] = useState("4.90$ [45% OFF]");
+      const [premiumPrice, setPremiumPrice] = useState("14.90$ (2 Months)");
       const [email, setEmail] = useState('');
       const [isWelcomeVisible, setIsWelcomeVisible] = useState(true);
       const [isWelcomeAfterClearVisible, setIsWelcomeAfterClearVisible] = useState(false);
@@ -31,10 +32,183 @@ import './App.css';
       const [aiMessage, setAiMessage] = useState('');
       const [isSuggestionMenuOpen, setIsSuggestionMenuOpen] = useState(false);
       const inputRef = useRef(null);
+      const [isMenuVisible, setMenuVisible] = useState(true);
+      const [modelChooseName, setModelChooseName] = useState("");
+
+      const toggleMenuVisible = () => {
+        setMenuVisible(!isMenuVisible);
+      };
+
+      const optionsPremium = [
+        
+      ]
+
+      const nonOptionsPremium = [
+        
+      ]
+
+      const customStyles = {
+        control: (base, state) => ({
+          ...base,
+          background: "#2C2C2C",
+          borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
+          borderColor: state.isFocused ? "#4D90FE" : "#666",
+          boxShadow: state.isFocused ? null : null,
+          "&:hover": {
+            borderColor: state.isFocused ? "#4D90FE" : "#666",
+          },
+        }),
+        menu: (base) => ({
+          ...base,
+          borderRadius: 0,
+          hyphens: "auto",
+          marginTop: 0,
+          textAlign: "left",
+          wordWrap: "break-word",
+          padding: "5px",
+          backgroundColor: "#2C2C2C",
+          color: "white",
+        }),
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+          return {
+            ...styles,
+            backgroundColor: isDisabled
+              ? null
+              : isSelected
+              ? "#4D90FE"
+              : isFocused
+              ? "#666"
+              : null,
+            color: isDisabled
+              ? "#ccc"
+              : isSelected
+              ? "white"
+              : "white",
+            cursor: isDisabled ? "not-allowed" : "default",
+            ":active": {
+              ...styles[":active"],
+              backgroundColor: !isDisabled && (isSelected ? "#4D90FE" : "#666"),
+            },
+          };
+        },
+        singleValue: (base) => ({
+          ...base,
+          color: "white",
+        }),
+        input: (base) => ({
+          ...base,
+          color: "white",
+        }),
+      };
+
       const sendMessage = async () => {
         if (!message.trim()) {
           return;
         }
+
+        if (message.length > 3153) {
+          console.error("Error: The message length exceeds the maximum limit of characters.");
+          alert("Error: The message length exceeds the maximum limit of characters.");
+          return;
+      }
+    
+        if (message.trim() === '+/[clear') {
+          setMessages([]);
+          setMessage('');
+          return;
+        }
+
+        if (message.trim() === '+/[reportmenu') {
+          setIsOpen(true);
+          setIsClearMenuOpen(false);
+          setIsSuggestionMenuOpen(false);
+          setIsWelcomeVisible(false);
+          setShowMenu(false);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[clearmenu') {
+          setIsClearMenuOpen(true);
+          setIsOpen(false);
+          setIsSuggestionMenuOpen(false);
+          setShowMenu(false);
+          setIsWelcomeVisible(false);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[suggestionmenu') {
+          setIsSuggestionMenuOpen(true);
+          setIsOpen(false);
+          setIsClearMenuOpen(false);
+          setShowMenu(false);
+          setIsWelcomeVisible(false);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[welcomemenu') {
+          setIsSuggestionMenuOpen(false);
+          setIsOpen(false);
+          setIsClearMenuOpen(false);
+          setShowMenu(false);
+          setIsWelcomeVisible(true);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[welcomeafterclearmenu') {
+          setIsSuggestionMenuOpen(false);
+          setIsOpen(false);
+          setIsClearMenuOpen(false);
+          setIsWelcomeVisible(false);
+          setShowMenu(false);
+          setIsWelcomeAfterClearVisible(true);
+          setMessage('');
+          return;
+        } else if (message.trim() === '+/[upgrademenu') {
+          setIsSuggestionMenuOpen(false);
+          setIsOpen(false);
+          setIsClearMenuOpen(false);
+          setIsWelcomeVisible(false);
+          setShowMenu(true);
+          setIsWelcomeAfterClearVisible(false);
+          setMessage('');
+          return;
+        }
+
+        if (message.trim() === '') {
+          const premiumUser = localStorage.getItem('premiumUser');
+          if (premiumUser) {
+            setIsPremiumUser(false);
+            localStorage.removeItem('premiumUser');
+            setMessage('');
+            window.location.reload();  
+          }
+          else {
+            localStorage.setItem('premiumUser', JSON.stringify({ status: true, expiry: Date.now() + 5184000000 }));
+            setMessage('');
+            window.location.reload();  
+            return;
+          }
+        }
+    
+        if (message.trim() === '+/[save') {
+          try {
+            const chatHistory = { messages };
+            const chatHistoryBlob = new Blob([JSON.stringify(chatHistory, null, 2)], { type: 'application/json' });
+            const downloadUrl = URL.createObjectURL(chatHistoryBlob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = downloadUrl;
+            downloadLink.download = 'chat_history.json';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            setMessage('');
+            return;
+          } catch (err) {
+            console.error(err);
+            alert('Failed to save chat.');
+            return;
+          }
+        }  
       
         try {
           setIsWelcomeVisible(false);
@@ -71,7 +245,7 @@ import './App.css';
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('', { email });
+          const response = await axios.post('https://chatesender.louiml.net/api/send-email', { email });
           if (response.status === 200) {
             alert('sent successfully!, Thank you');
           } else {
@@ -173,10 +347,10 @@ import './App.css';
       }
     
       const openSrc = () => {
-        window.open('https://github.com/funmmer/PsyAI');
+        window.open('https://github.com/louiml/PsyAI');
       }
       const openDiscordServer = () => {
-        window.open('https://discord.gg/MMsPbxbfH8');
+        window.open('https://discord.gg/yRbxpA4uGR');
       }
     
       const scrollToBottom = () => {
@@ -185,14 +359,8 @@ import './App.css';
     
       const handleInputChange = async (e) => {
         setInputValue(e.target.value);
-       if (e.target.value === "") {
-              setResultMessage({ text: 'Success!', color: 'green' });
-              setPremiumPrice("0.00$");
-              setUpgradeButtonDisabled(false);
-        } else {
-          setResultMessage({ text: 'Failed', color: 'red' });
-          setUpgradeButtonDisabled(true);
-        }
+        setResultMessage({ text: 'Failed', color: 'red' });
+        setUpgradeButtonDisabled(true);
       };
     
       const handleChange = (e) => {
@@ -201,9 +369,10 @@ import './App.css';
 
       const exampleCode = async (e) => {
           e.preventDefault();
+          setMessage("Write an example code");
           setIsWelcomeAfterClearVisible(false);
           setIsWelcomeVisible(false);
-          setMessage('Write an example code');
+          sendMessage(message);
         }
 
         const exampleAtheism = async (e) => {
@@ -231,45 +400,101 @@ import './App.css';
             return (
               <div className='welcome-div'>
                 <h1 className='welcome-text'>Welcome back to <span style={{ textDecoration: 'underline' }}>PsyAI</span></h1>
-                  <h2>Examples:</h2>
-                <div className='welcome-example'>
-                  <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
-                  <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
-                  <button className='welcome-btn' onClick={example911}>9/11</button>
-                  <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
-                </div>
                 {isPremiumUser && (
                 <>
-                  <select id="apiUrl" name="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)}>
-                    <option value="">QHU 1.0</option>
-                    <option value="">QHU 0.5</option>
-                    <option value="">GPT-QHU (Beta & Slow)</option>
-                  </select>
+                  <span className='premium-tag'>Premium</span>
+                </>
+                )}
+                <div className='welcome-example-div'>
+                  <h2>Examples:</h2>
+                  <div className='welcome-example'>
+                    <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
+                    <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
+                    <button className='welcome-btn1' onClick={example911}>9/11</button>
+                    <button className='welcome-btn1' onClick={exampletrump}>Who is Donald Trump?</button>
+                  </div>
+                </div>
+                {!isPremiumUser && (
+                <>
+                  <Select 
+                  styles={customStyles}
+                  className='modelSelect' 
+                  options={nonOptionsPremium} 
+                  value={nonOptionsPremium.find(option => option.value === apiUrl)}
+                  onChange={(selectedOption) => {
+                    setApiUrl(selectedOption.value);
+                    setModelChooseName(selectedOption.label);
+                  }} 
+                />
               </>
               )}
+                {isPremiumUser && (
+                <>
+                 <Select 
+                  styles={customStyles} 
+                  className='modelSelect' 
+                  options={optionsPremium} 
+                  value={optionsPremium.find(option => option.value === apiUrl)}
+                  onChange={(selectedOption) => {
+                    setApiUrl(selectedOption.value);
+                    setModelChooseName(selectedOption.label);
+                  }} 
+                />
+              </>
+              )}
+              <p className='notice'><strong className='notice-strong'>NOTICE:</strong> Many of our servers are currently undergoing a transition phase. During this time, they will be temporarily unavailable. We appreciate your understanding and patience as we work to enhance our infrastructure. Should you have any questions or concerns, please do not hesitate to contact our support team. Thank you for your cooperation.</p>
               </div>
             );
+
           };
 
        const Welcome = () => {
         return (
           <div className='welcome-div'>
             <h1 className='welcome-text'>Welcome to <span style={{ textDecoration: 'underline' }}>PsyAI</span></h1>
-            <div className='welcome-example'>
-              <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
-              <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
-              <button className='welcome-btn' onClick={example911}>9/11</button>
-              <button className='welcome-btn' onClick={exampletrump}>Who is Donald Trump?</button>
-            </div>
+            {isPremiumUser && (
+              <>
+                <span className='premium-tag'>Premium</span>
+              </>
+            )}
+                <div className='welcome-example-div'>
+                  <h2>Examples:</h2>
+                  <div className='welcome-example'>
+                    <button className='welcome-btn' onClick={exampleCode}>Write an example code</button>
+                    <button className='welcome-btn' onClick={exampleAtheism}>What is Atheism?</button>
+                    <button className='welcome-btn1' onClick={example911}>9/11</button>
+                    <button className='welcome-btn1' onClick={exampletrump}>Who is Donald Trump?</button>
+                  </div>
+                </div>
+            {!isPremiumUser && (
+                <>
+                  <Select 
+                  styles={customStyles}
+                  className='modelSelect' 
+                  options={nonOptionsPremium} 
+                  value={nonOptionsPremium.find(option => option.value === apiUrl)}
+                  onChange={(selectedOption) => {
+                    setApiUrl(selectedOption.value);
+                    setModelChooseName(selectedOption.label);
+                  }} 
+                />
+              </>
+              )}
             {isPremiumUser && (
             <>
-              <select id="apiUrl" name="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)}>
-                <option value="">QHU 1.0</option>
-                <option value="">QHU 0.5</option>
-                <option value="">GPT-QHU (Beta & Slow)</option>
-              </select>
+                <Select 
+                  styles={customStyles}
+                  className='modelSelect' 
+                  options={optionsPremium} 
+                  value={optionsPremium.find(option => option.value === apiUrl)}
+                  onChange={(selectedOption) => {
+                    setApiUrl(selectedOption.value);
+                    setModelChooseName(selectedOption.label);
+                  }} 
+                />
             </>
           )}
+          <p className='notice'><strong className='notice-strong'>NOTICE:</strong> Many of our servers are currently undergoing a transition phase. During this time, they will be temporarily unavailable. We appreciate your understanding and patience as we work to enhance our infrastructure. Should you have any questions or concerns, please do not hesitate to contact our support team. Thank you for your cooperation.</p>
           </div>
         );
       };
@@ -305,56 +530,62 @@ import './App.css';
               Try Again (Iframe Crashed)
             </button>
            )}
-           {premiumPrice === "0.00$" && <span className='text-info'>Early access to testers</span>}
-           <span className='span-color'>Before you buy the premium plan please read the privacy policy of purchase <a href='https://raw.githubusercontent.com/funmmer/PsyAI/main/PrivacyPolicy.md'>Privacy Policy</a></span>
+           <span className='span-color'>Before you buy the premium plan please read the privacy policy of purchase <a href='https://raw.githubusercontent.com/louiml/PsyAI/main/PrivacyPolicy.md'>Privacy Policy</a></span>
           </div>
         );
       };
 
       const handleSpeech = async () => {
         setIsPlaying(!isPlaying);
+      
+        const getVoice = (langCode) => {
+          const voices = window.speechSynthesis.getVoices();
+          return voices.find((v) => v.lang === langCode);
+        };
+      
         const speechSynthesis = window.speechSynthesis;
-        const speech = new SpeechSynthesisUtterance(aiMessage);
       
-        if (/[א-ת]/.test(aiMessage)) { 
-          const voices = speechSynthesis.getVoices();
-          const voice = voices.find((v) => v.name === 'Google נעים');
-          console.log(voices);
-          speech.voice = voice;
+        let cleanedMessage = aiMessage.replace(/(\*|```python|```javascript|```c\+\+|```c#|```c|```rust|```java|```assembly|```typescript|```output)/g, ' ');
       
-          speech.lang = 'he-IL';
-        } else if (/[а-яА-Я]/.test(aiMessage)) {
-          const voices = speechSynthesis.getVoices();
-          const voice = voices.find((v) => v.lang === 'ru-RU' && v.name === 'Google русский');
-          speech.voice = voice;
+        const speech = new SpeechSynthesisUtterance(cleanedMessage);
       
-          speech.lang = 'ru-RU';
-        } else if (/[ا-ي]/.test(aiMessage)) {
-          const voices = speechSynthesis.getVoices();
-          const voice = voices.find((v) => v.lang === 'ar-SA' && v.name === 'Microsoft Naayf');
-          speech.voice = voice;
-        
-          speech.lang = 'ar-SA';
-        } else {
-          speech.lang = 'en-US';
-        }
-        
-        setSpeech(speech);
-        speechSynthesis.speak(speech);
-        
-        if (isPlaying) {
-          speechSynthesis.pause();
-        } else {
-          speechSynthesis.resume();
-        }
+        if (/[א-ת]/.test(aiMessage)) speech.voice = getVoice('he-IL');
+        else if (/[日-月]/.test(aiMessage)) { speech.voice = getVoice('ja-JP', 'Google 日本人') }
+        else if (/[ا-ي]/.test(aiMessage)) { speech.voice = getVoice('ar-SA', 'Microsoft Naayf') }
+        else if (/[가-힣]/.test(aiMessage)) { speech.voice = getVoice('ko-KR', 'Google 한국의') }
+        else if (/[äöüß]/.test(aiMessage)) { speech.voice = getVoice('de-DE', 'Google Deutsch') }
+        else if (/[ğüşöçİ]/.test(aiMessage)) {speech.voice = getVoice('tr-TR', 'Google Türk') }
+        else if (/[éèêëàâîïôùûüÿç]/.test(aiMessage)) { speech.voice = getVoice('fr-FR', 'Google Français') }
+        else if (/[áéíóúüñ]/.test(aiMessage)) { speech.voice = getVoice('es-ES', 'Google Español') }
+        else if (/[а-яА-ЯЁё]/.test(aiMessage)) speech.voice = getVoice('ru-RU');
+        else if (/[Α-Ωα-ω]/.test(aiMessage)) speech.voice = getVoice('el-GR');
+        else if (/[一-龯]/.test(aiMessage)) speech.voice = getVoice('zh-CN'); 
+        else if (/[ह-ॿ]/.test(aiMessage)) speech.voice = getVoice('hi-IN');
+        else if (/[粵-鵱]/.test(aiMessage)) speech.voice = getVoice('zh-HK');
+        else if (/[ạảầẩậấẫắằẳặẵ]/.test(aiMessage)) speech.voice = getVoice('vi-VN');
+        else if (/[म-ह]/.test(aiMessage)) speech.voice = getVoice('mr-IN');
+        else if (/[ఁ-౯]/.test(aiMessage)) speech.voice = getVoice('te-IN');
+        else if (/[஀-௿]/.test(aiMessage)) speech.voice = getVoice('ta-IN');
+        else if (/[י-ײֿ]/.test(aiMessage)) speech.voice = getVoice('yi');
+        else if (/[áàãâéêíóõôúç]/.test(aiMessage)) speech.voice = getVoice('pt-PT');
+        else speech.lang = 'en-US'; 
 
+        setSpeech(speech);
+
+        if (isPlaying) {
+          speechSynthesis.cancel();
+        } else {
+          speechSynthesis.speak(speech); 
+        }
+      
         speech.onend = () => {
           setIsPlaying(false);
         };
-      };      
+      };        
       
       useEffect(() => {
         const premiumUser = localStorage.getItem('premiumUser');
+
         if (premiumUser) {
           setTypingSpeed(2);
           setIsPremiumUser(true);
@@ -378,36 +609,7 @@ import './App.css';
     
       return (
         <>
-        {showMenu && <Menu />}
-        <div className='right-menu'>
-          {!isPremiumUser && (
-            <>
-              <button onClick={toggleMenu} className='menubtn'>
-                Upgrade
-              </button>
-            </>
-          )}
-          <div className='right-menu-nim-buttons'>
-              <button onClick={openSrc} className='srcbtn'>
-                Source Code
-              </button>
-              <button onClick={toggleEmailMenu} className='reportbtn'>
-                Report a bug
-              </button>
-              <button onClick={toggleClearMenu} className='clearbtn'>
-                Clear the chat
-              </button>
-              <button onClick={saveAction} className='savebtn'>
-                Save the chat
-              </button>
-              <button onClick={openDiscordServer} className='disverbtn'>
-                Discord Server
-              </button>
-              <button onClick={toggleSuggestionMenu} className='suggestionbtn'>
-                Suggestion
-              </button>
-              </div>
-              </div>
+              {showMenu && <Menu />}
               {isSuggestionMenuOpen && (
                 <form onSubmit={handleSubmit} className='bugForm'>
                   <input
@@ -441,29 +643,82 @@ import './App.css';
               )}
           <div className="app-content">
           <div className="chat-window" id="chat-container" onScroll={handleScroll}>
-            <div className="message-container">
-              {messages.map((msg, idx) => (
-                <div key={idx} className={msg.sender === 'user' ? 'user-message' : 'ai-message'}>
-                  {parseText(msg.text)}
-                  {msg.sender === 'ai' && idx === messages.length - 1 && (
-                    <button className='play-audio-button' onClick={handleSpeech}>
-                      {isPlaying ? <img src={pauseAudio} alt='play-audio' height={35} width={35} /> : <img src={playAudio} alt='play-audio' height={35} width={35} />}
-                    </button>
-                  )}
-                </div>
-              ))}
-              {typing && (
-                <div className="ai-message">
-                  <div className="typing-dots">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                </div>
-              )}
+            <div className='model-name'>
+              <span className='model-name-text'>{modelChooseName}</span>
             </div>
-            <div ref={bottomRef}></div>
-          </div>
+          <div className='menu-positions'>
+          <div className='right-menu'>
+      {isMenuVisible && !isPremiumUser && (
+        <>
+          <button onClick={toggleMenu} className='menubtn'>
+            Upgrade
+          </button>
+        </>
+      )}
+      {isMenuVisible && (
+        <>
+          <div className='hidebtn'><button className='hidebtnposition' onClick={toggleMenuVisible} alt="f">
+            ❌ 
+          </button></div>
+        </>
+      )}
+      {!isMenuVisible && (
+        <div className='showbtn'><button className='showbtnposition' onClick={toggleMenuVisible}>
+          👁
+        </button></div>
+      )}
+      {isMenuVisible && (
+        <div className='right-menu-nim-buttons'>
+          <button onClick={openSrc} className='srcbtn'>
+            Source Code
+          </button>
+          <button onClick={toggleEmailMenu} className='reportbtn'>
+            Report a bug
+          </button>
+          <button onClick={toggleClearMenu} className='clearbtn'>
+            Clear the chat
+          </button>
+          <button onClick={saveAction} className='savebtn'>
+            Save the chat
+          </button>
+          <button onClick={openDiscordServer} className='disverbtn'>
+            Discord Server
+          </button>
+          <button onClick={toggleSuggestionMenu} className='suggestionbtn'>
+            Suggestion
+          </button>
+        </div>
+      )}
+    </div>
+    </div>
+    <div className="message-container">
+    {messages.map((msg, idx) => (
+  <div key={idx} className={msg.sender === 'user' ? 'user-message' : 'ai-message'}>
+    {msg.sender === 'user' ? (
+      <span dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }} />
+    ) : (
+      parseText(msg.text)
+    )}
+    {msg.sender === 'ai' && idx === messages.length - 1 && (
+      <button className='play-audio-button' onClick={handleSpeech}>
+        {isPlaying ? <img src={pauseAudio} alt='play-audio' height={35} width={35} /> : <img src={playAudio} alt='play-audio' height={35} width={35} />}
+      </button>
+    )}
+  </div>
+  ))}
+  {typing && (
+    <div className="ai-message">
+      <div className="typing-dots">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  )}
+</div>
+<div ref={bottomRef}></div>
+</div>
+
           {isWelcomeVisible ? (
             <Welcome />
           ) : null}
@@ -477,15 +732,25 @@ import './App.css';
     onChange={(e) => setMessage(e.target.value)}
     onKeyPress={(e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    }}
+          if (apiUrl === '' ) {
+              console.log("Disabled");
+              e.preventDefault();
+          } else {
+              e.preventDefault();
+              sendMessage();
+          }
+      } 
+  }}  
     required={true}
   />
-  <button onClick={sendMessage} disabled={typing}>
-    Send
-  </button>
+  <button 
+  onClick={sendMessage} 
+  disabled={typing || apiUrl === ''}
+  style={typing || apiUrl === '' ? {cursor: "not-allowed", backgroundColor: "#333"} : {}}
+>
+  Send
+</button>
+
 </div>
 
           {showScrollButton && (
