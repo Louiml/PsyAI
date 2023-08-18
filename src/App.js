@@ -245,7 +245,7 @@ import './App.css';
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('https://chatesender.louiml.net/api/send-email', { email });
+          const response = await axios.post('', { email });
           if (response.status === 200) {
             alert('sent successfully!, Thank you');
           } else {
