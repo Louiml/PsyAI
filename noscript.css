@@ -1,0 +1,25 @@
+.noscript-center {
+    align-items: center;
+    text-align: center;
+    background-color: rgb(34, 32, 32) !important;
+    margin-bottom: 50px;
+    color: white !important;
+}
+
+.noscript-center-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.noscript-center2 {
+    margin-top: 50px !important;
+}
+
+.noscript-center-button {
+    background-color: beige;
+    padding: 15px;
+    color: rgb(52, 51, 51);
+    border: whitesmoke 2px solid;
+    border-radius: 10px;
+}
